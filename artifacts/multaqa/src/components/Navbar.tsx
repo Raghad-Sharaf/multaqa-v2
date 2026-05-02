@@ -37,7 +37,7 @@ export function Navbar() {
       {/* Logo */}
       <div className="flex items-center gap-8">
         <Link href="/" className="flex items-center">
-          <img src="/logo.png" alt="Multaqa" className="h-10 w-auto" />
+          <img src="/logo.png" alt="Multaqa" className="h-14 w-auto" />
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
