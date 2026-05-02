@@ -14,72 +14,132 @@ export function Navbar() {
   };
 
   return (
-    <nav className="bg-secondary text-white py-4 px-6 md:px-12 flex items-center justify-between sticky top-0 z-50 shadow-md">
+    <nav
+      className="sticky top-0 z-50 border-b border-black/8 py-3 px-6 md:px-12 flex items-center justify-between shadow-sm"
+      style={{
+        backgroundColor: "color-mix(in oklab, var(--background) 95%, transparent)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+      }}
+    >
+      {/* Logo */}
       <div className="flex items-center gap-8">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          Multaqa
+        <Link href="/" className="flex items-center">
+          <img src="/logo.png" alt="Multaqa" className="h-10 w-auto" />
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/desks" className="text-sm font-medium hover:text-accent transition-colors">
-            Browse Desks
-          </Link>
-          <Link href="/rooms" className="text-sm font-medium hover:text-accent transition-colors">
-            Browse Rooms
-          </Link>
-          {currentUser && (
-            <Link href="/community" className="text-sm font-medium hover:text-accent transition-colors">
-              Community
+          {[
+            { href: "/desks", label: "Browse Desks" },
+            { href: "/rooms", label: "Browse Rooms" },
+            ...(currentUser ? [{ href: "/community", label: "Community" }] : []),
+            { href: "/support", label: "Support", icon: <LifeBuoy className="w-4 h-4" /> },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-medium flex items-center gap-1.5 transition-colors"
+              style={{ color: "#001279" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
+            >
+              {item.icon} {item.label}
             </Link>
-          )}
-          <Link href="/support" className="text-sm font-medium hover:text-accent transition-colors flex items-center gap-1">
-            <LifeBuoy className="w-4 h-4" /> Support
-          </Link>
+          ))}
         </div>
       </div>
 
+      {/* Right side */}
       <div className="flex items-center gap-3">
         {currentUser ? (
           <div className="flex items-center gap-3">
             {/* Favourites badge */}
-            <Link href="/desks" className="relative hidden md:flex items-center text-white/70 hover:text-white transition-colors" title="My Favourites">
+            <Link
+              href="/desks"
+              className="relative hidden md:flex items-center transition-colors"
+              title="My Favourites"
+              style={{ color: "#001279" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
+            >
               <Heart className="w-5 h-5" />
               {favorites.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary rounded-full text-[9px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center text-white"
+                  style={{ background: "#FF5100" }}>
                   {favorites.length}
                 </span>
               )}
             </Link>
 
-            <Link href="/my-reservations" className="text-sm font-medium hover:text-accent transition-colors hidden md:block">
+            <Link
+              href="/my-reservations"
+              className="text-sm font-medium hidden md:block transition-colors"
+              style={{ color: "#001279" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
+            >
               My Bookings
             </Link>
 
-            <Link href="/onboarding" className="hidden md:flex items-center gap-1 text-xs text-white/50 hover:text-white/80 transition-colors" title="Tutorial">
+            <Link
+              href="/onboarding"
+              className="hidden md:flex items-center gap-1 text-xs transition-colors"
+              title="Tutorial"
+              style={{ color: "#001279", opacity: 0.5 }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#FF5100"; e.currentTarget.style.opacity = "1"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#001279"; e.currentTarget.style.opacity = "0.5"; }}
+            >
               <BookOpen className="w-4 h-4" />
             </Link>
 
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setLocation("/my-reservations")}>
-              <Avatar className="w-8 h-8 border border-white/20">
-                <AvatarFallback className="bg-primary text-white text-xs">
+              <Avatar className="w-8 h-8 border" style={{ borderColor: "#001279" + "33" }}>
+                <AvatarFallback className="text-white text-xs" style={{ background: "#FF5100" }}>
                   {currentUser.name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleLogout} className="text-white hover:text-accent hover:bg-white/10 hidden md:flex">
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="hidden md:flex text-sm font-medium transition-colors"
+              style={{ color: "#001279" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
+            >
               Log Out
             </Button>
           </div>
         ) : (
           <div className="flex items-center gap-3">
-            <Link href="/onboarding" className="hidden md:flex items-center gap-1 text-xs text-white/60 hover:text-white/90 transition-colors">
+            <Link
+              href="/onboarding"
+              className="hidden md:flex items-center gap-1 text-xs transition-colors"
+              style={{ color: "#001279", opacity: 0.6 }}
+              onMouseEnter={e => { e.currentTarget.style.color = "#FF5100"; e.currentTarget.style.opacity = "1"; }}
+              onMouseLeave={e => { e.currentTarget.style.color = "#001279"; e.currentTarget.style.opacity = "0.6"; }}
+            >
               <BookOpen className="w-4 h-4" /> Tour
             </Link>
-            <Link href="/login" className="text-sm font-medium hover:text-accent transition-colors hidden md:block">
+            <Link
+              href="/login"
+              className="text-sm font-medium hidden md:block transition-colors"
+              style={{ color: "#001279" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
+            >
               Log In
             </Link>
             <Link href="/register">
-              <Button size="sm" className="bg-white text-secondary hover:bg-accent hover:text-primary">
+              <Button
+                size="sm"
+                className="text-white font-semibold rounded-lg px-5"
+                style={{ background: "#FF5100", borderColor: "transparent" }}
+                onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
+                onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}
+              >
                 Sign Up
               </Button>
             </Link>

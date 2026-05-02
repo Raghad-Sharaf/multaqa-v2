@@ -2,9 +2,68 @@ import { Link } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/context/AppContext";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Users, Layers, RefreshCw, Heart, BarChart3, MessageSquare, BellRing, BookOpen, ArrowRight, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { OnboardingModal } from "@/components/OnboardingModal";
+
+const features = [
+  {
+    icon: <Users className="w-6 h-6" />,
+    title: "Team Booking",
+    desc: "Reserve adjacent desks for your whole team in one checkout. Confirmation sent to every member automatically.",
+    color: "#001279",
+    bg: "#E8EBFF",
+  },
+  {
+    icon: <Layers className="w-6 h-6" />,
+    title: "Multi-Day Booking",
+    desc: "Pick multiple days at once. One checkout, one confirmation — for the entire stretch you need.",
+    color: "#1A7A4A",
+    bg: "#E6F5EC",
+  },
+  {
+    icon: <RefreshCw className="w-6 h-6" />,
+    title: "Recurring Reservations",
+    desc: "Set a weekly or daily schedule and your seat is secured automatically — no rebooking needed.",
+    color: "#FF5100",
+    bg: "#FFF0E8",
+  },
+  {
+    icon: <Heart className="w-6 h-6" />,
+    title: "Favourite Seats",
+    desc: "Heart any desk or room to save it. Next visit, your preferred spot is just one tap away.",
+    color: "#CC1A00",
+    bg: "#FFEAE8",
+  },
+  {
+    icon: <BellRing className="w-6 h-6" />,
+    title: "Waitlist",
+    desc: "Fully booked? Join the waitlist. We notify you the moment a cancellation opens your preferred slot.",
+    color: "#8B5CF6",
+    bg: "#F3F0FF",
+  },
+  {
+    icon: <BarChart3 className="w-6 h-6" />,
+    title: "Analytics & Reporting",
+    desc: "Admins get real-time revenue charts, occupancy heatmaps, drop-off funnels, and popular seat rankings.",
+    color: "#001279",
+    bg: "#E8EBFF",
+  },
+  {
+    icon: <MessageSquare className="w-6 h-6" />,
+    title: "Customer Support",
+    desc: "Reach us via the in-app support form. Track your tickets and get answers within 24 hours.",
+    color: "#1A7A4A",
+    bg: "#E6F5EC",
+  },
+  {
+    icon: <BookOpen className="w-6 h-6" />,
+    title: "Guided Onboarding",
+    desc: "A quick interactive tour and explainer video walks new users through every feature in under 2 minutes.",
+    color: "#FF5100",
+    bg: "#FFF0E8",
+  },
+];
 
 export default function Home() {
   const { desks, currentLocation } = useAppContext();
@@ -16,124 +75,181 @@ export default function Home() {
     <UserLayout>
       <OnboardingModal />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden text-white" style={{
-        background: "linear-gradient(135deg, #000840 0%, #001279 35%, #001C9E 65%, #0A22B0 100%)"
-      }}>
-        {/* Ambient glows */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(255,81,0,0.18) 0%, transparent 70%)", transform: "translate(20%, -20%)" }} />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[400px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(255,81,0,0.10) 0%, transparent 70%)", transform: "translate(-20%, 30%)" }} />
-        <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "150px" }} />
+      {/* ── Hero Section ── */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          backgroundImage: "linear-gradient(to bottom right, oklch(95% .04 268), oklch(100% 0 0) 50%, oklch(97% .03 50))",
+        }}
+      >
+        {/* Soft grid texture */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
+          style={{
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40' fill='none' stroke='%23001279' stroke-width='0.5'/%3E%3C/svg%3E\")",
+            backgroundSize: "40px 40px",
+          }} />
 
-        <div className="container mx-auto px-6 py-24 md:py-36 relative z-10 flex flex-col items-center text-center">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-            <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 border border-white/20 text-xs font-semibold tracking-widest mb-8 uppercase">
-              Coworking in Palestine
-            </span>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-white max-w-4xl leading-[1.05]">
-              Your seat.{" "}
-              <span style={{ color: "#FF5100" }}>Secured.</span>
-            </h1>
-            <p className="text-lg md:text-xl text-white/75 max-w-2xl mx-auto mb-12 leading-relaxed">
-              A warm, professional space for remote workers, freelancers, and students.
-              Book your desk or meeting room in Nablus and Ramallah.
-            </p>
+        <div className="container mx-auto px-6 py-24 md:py-36 relative z-10">
+          <div className="max-w-5xl mx-auto text-center">
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
+              <span
+                className="inline-block py-1.5 px-4 rounded-full text-xs font-semibold tracking-widest mb-8 uppercase border"
+                style={{ background: "#E8EBFF", color: "#001279", borderColor: "#001279" + "22" }}
+              >
+                Coworking in Palestine
+              </span>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/desks">
-                <Button size="lg" className="w-full sm:w-auto text-base h-14 px-10 rounded-xl shadow-xl shadow-[#FF5100]/20"
-                  style={{ background: "#FF5100" }}>
-                  Browse Desks
-                </Button>
-              </Link>
-              <Link href="/rooms">
-                <Button size="lg" variant="outline"
-                  className="w-full sm:w-auto text-base h-14 px-10 bg-white/8 border-white/25 hover:bg-white/15 hover:text-white rounded-xl text-white backdrop-blur-sm">
-                  Browse Rooms
-                </Button>
-              </Link>
+              <h1
+                className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.05]"
+                style={{ color: "#001279" }}
+              >
+                Your seat.{" "}
+                <span style={{ color: "#FF5100" }}>Secured.</span>
+              </h1>
+
+              <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed" style={{ color: "#535060" }}>
+                A warm, professional space for remote workers, freelancers, and students. Book your desk or meeting room in Nablus and Ramallah — in under a minute.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link href="/desks">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto text-base h-14 px-10 rounded-xl shadow-lg text-white font-semibold"
+                    style={{ background: "#FF5100", boxShadow: "0 8px 24px rgba(255,81,0,.25)" }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
+                    onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}
+                  >
+                    Browse Desks
+                  </Button>
+                </Link>
+                <Link href="/rooms">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full sm:w-auto text-base h-14 px-10 rounded-xl font-semibold"
+                    style={{ color: "#001279", borderColor: "#001279" + "40" }}
+                  >
+                    Browse Rooms <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Live availability card */}
+        <div className="container mx-auto px-6 pb-12 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="max-w-xl mx-auto bg-white rounded-2xl shadow-xl border flex items-center gap-5 p-5"
+            style={{ borderColor: "#001279" + "15" }}
+          >
+            <div
+              className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: "#FFF0E8" }}
+            >
+              <MapPin className="w-5 h-5" style={{ color: "#FF5100" }} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-0.5" style={{ color: "#535060" }}>
+                Live Availability · {currentLocation}
+              </p>
+              <p className="font-bold text-lg" style={{ color: "#001279" }}>
+                <span style={{ color: "#FF5100" }}>{availableDesks}</span> of {totalDesks} desks available right now
+              </p>
+            </div>
+            <div className="ml-auto">
+              <span className="w-3 h-3 rounded-full bg-emerald-400 flex items-center justify-center animate-pulse" />
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Live Counter */}
-      <div className="relative -mt-8 z-20 container mx-auto px-6 max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25 }}
-          className="bg-white rounded-xl shadow-xl border border-border p-6 flex flex-col md:flex-row items-center justify-between gap-4"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center text-primary" style={{ background: "#FFF0E8" }}>
-              <ArmchairIcon className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Live Availability</p>
-              <p className="text-xl font-bold text-secondary">
-                <span className="text-primary">{availableDesks}</span> of {totalDesks} seats available
-              </p>
-            </div>
-          </div>
-          <div className="text-right">
-            <p className="text-sm font-medium text-muted-foreground">Right now at Multaqa — {currentLocation}</p>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* How it works */}
-      <section className="py-24 bg-background">
+      {/* ── How it works ── */}
+      <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-secondary mb-4">How it works</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Three simple steps to secure your productive space for the day.</p>
+            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FF5100" }}>Simple process</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4" style={{ color: "#001279" }}>Book in 3 steps</h2>
+            <p className="max-w-xl mx-auto" style={{ color: "#535060" }}>From browsing to confirmed booking in under 60 seconds — no account required.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
-              { step: "1. Browse", icon: <SearchIcon className="w-8 h-8" />, desc: "Find the perfect desk or room based on your needs — deep work or calls allowed." },
-              { step: "2. Book", icon: <CalendarIcon className="w-8 h-8" />, desc: "Select your time, from one hour to a full day. Team, multi-day, and recurring options available." },
-              { step: "3. Arrive", icon: <DoorOpenIcon className="w-8 h-8" />, desc: "Pay in cash on-site. Walk in, find your reserved spot, and start working." },
-            ].map(item => (
-              <div key={item.step} className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-primary" style={{ background: "#FFF0E8" }}>
-                  {item.icon}
+              { num: "01", title: "Browse", desc: "Filter desks and rooms by zone, type, and location. See real-time availability." },
+              { num: "02", title: "Book", desc: "Pick your date, time and booking mode — single, multi-day, recurring or team." },
+              { num: "03", title: "Arrive", desc: "Walk in, find your reserved spot, and pay in cash on-site. That's it." },
+            ].map((step) => (
+              <div key={step.num} className="flex flex-col items-center text-center group">
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 font-black text-2xl transition-transform group-hover:scale-105"
+                  style={{ background: "#E8EBFF", color: "#001279" }}
+                >
+                  {step.num}
                 </div>
-                <h3 className="text-xl font-bold text-secondary mb-2">{item.step}</h3>
-                <p className="text-muted-foreground">{item.desc}</p>
+                <h3 className="text-xl font-bold mb-2" style={{ color: "#001279" }}>{step.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#535060" }}>{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Strip */}
-      <section className="py-10 border-y border-border bg-muted/40">
+      {/* ── Features 2×4 Grid ── */}
+      <section
+        className="py-24"
+        style={{ backgroundImage: "linear-gradient(to bottom, oklch(97% .02 268), oklch(100% 0 0))" }}
+      >
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-center">
-            {[
-              { label: "Team Booking", desc: "Book adjacent seats for your whole team" },
-              { label: "Multi-Day", desc: "Select multiple days in one checkout" },
-              { label: "Recurring", desc: "Weekly or daily recurring reservations" },
-              { label: "Favourites", desc: "Save preferred seats for quick rebooking" },
-            ].map(f => (
-              <div key={f.label} className="flex flex-col items-center gap-2">
-                <span className="text-sm font-bold text-secondary">{f.label}</span>
-                <span className="text-xs text-muted-foreground">{f.desc}</span>
-              </div>
+          <div className="text-center mb-16">
+            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FF5100" }}>Platform features</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4" style={{ color: "#001279" }}>
+              Everything your workspace needs
+            </h2>
+            <p className="max-w-xl mx-auto" style={{ color: "#535060" }}>
+              From team collaboration to personal productivity — Multaqa has the tools to make every session seamless.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {features.map((f, i) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: (i % 4) * 0.07 }}
+                className="group bg-white rounded-2xl border p-7 flex flex-col gap-4 hover:shadow-lg transition-all hover:-translate-y-0.5 cursor-default"
+                style={{ borderColor: "#001279" + "12" }}
+              >
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
+                  style={{ background: f.bg, color: f.color }}
+                >
+                  {f.icon}
+                </div>
+                <div>
+                  <h3 className="font-bold text-base mb-1.5" style={{ color: "#001279" }}>{f.title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#535060" }}>{f.desc}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Trust Signals */}
-      <section className="py-24 bg-muted border-y border-border">
+      {/* ── Trust / Why Multaqa ── */}
+      <section className="py-24 bg-white border-t" style={{ borderColor: "#001279" + "10" }}>
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
             <div>
-              <h2 className="text-3xl font-bold text-secondary mb-6">Everything you need to do your best work.</h2>
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FF5100" }}>Why Multaqa</span>
+              <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-8" style={{ color: "#001279" }}>
+                Everything you need to do your best work.
+              </h2>
               <div className="space-y-6">
                 {[
                   { title: "Verified spaces & real photos", desc: "What you see is what you get. No surprises when you arrive." },
@@ -141,41 +257,60 @@ export default function Home() {
                   { title: "Reliable amenities", desc: "Fast WiFi, standing desks, and monitors available where you need them." },
                 ].map(item => (
                   <div key={item.title} className="flex items-start gap-4">
-                    <CheckCircle2 className="w-6 h-6 text-success shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-6 h-6 shrink-0 mt-0.5" style={{ color: "#1A7A4A" }} />
                     <div>
-                      <h4 className="font-bold text-secondary text-lg">{item.title}</h4>
-                      <p className="text-muted-foreground">{item.desc}</p>
+                      <h4 className="font-bold text-base mb-1" style={{ color: "#001279" }}>{item.title}</h4>
+                      <p className="text-sm" style={{ color: "#535060" }}>{item.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
+              <div className="mt-10">
+                <Link href="/desks">
+                  <Button
+                    size="lg"
+                    className="h-12 px-8 rounded-xl text-white font-semibold"
+                    style={{ background: "#001279" }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#001899")}
+                    onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#001279")}
+                  >
+                    Find your desk <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
             </div>
+
             <div className="grid grid-cols-2 gap-4">
-              <img src="/desk-1.png" alt="Coworking space" className="rounded-xl object-cover h-64 w-full" />
-              <img src="/room-1.png" alt="Meeting room" className="rounded-xl object-cover h-64 w-full mt-8" />
+              <img src="/desk-1.png" alt="Coworking space" className="rounded-2xl object-cover h-64 w-full shadow-md" />
+              <img src="/room-1.png" alt="Meeting room" className="rounded-2xl object-cover h-64 w-full shadow-md mt-8" />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA Banner ── */}
+      <section
+        className="py-20"
+        style={{ backgroundImage: "linear-gradient(135deg, #000840, #001279 50%, #001D99)" }}
+      >
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to book your space?</h2>
+          <p className="text-white/70 mb-10 max-w-xl mx-auto text-lg">Join hundreds of professionals working smarter across Nablus and Ramallah.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/desks">
+              <Button size="lg" className="h-14 px-10 text-base text-white font-semibold rounded-xl shadow-lg"
+                style={{ background: "#FF5100", boxShadow: "0 8px 24px rgba(255,81,0,0.35)" }}>
+                Browse Desks
+              </Button>
+            </Link>
+            <Link href="/rooms">
+              <Button size="lg" variant="outline" className="h-14 px-10 text-base rounded-xl font-semibold text-white border-white/30 hover:bg-white/10">
+                Browse Rooms
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
     </UserLayout>
   );
-}
-
-function ArmchairIcon(props: any) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/>
-      <path d="M3 11v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H7v-2a2 2 0 0 0-4 0Z"/>
-      <path d="M5 18v2"/><path d="M19 18v2"/>
-    </svg>
-  );
-}
-function SearchIcon(props: any) {
-  return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>;
-}
-function CalendarIcon(props: any) {
-  return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>;
-}
-function DoorOpenIcon(props: any) {
-  return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"/></svg>;
 }
