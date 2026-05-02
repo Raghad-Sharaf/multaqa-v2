@@ -1,0 +1,38 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "CIEMT-h4jkb9DgbzWkA-x"
+uri = "file://artifacts/multaqa/public/desk-1.png"
+type = "image"
+title = "Modern flex desk"
+
+[[generated]]
+id = "6ednQCF9cMqT_DzJA_Ckc"
+uri = "file://artifacts/multaqa/public/desk-2.png"
+type = "image"
+title = "Standing desk by window"
+
+[[generated]]
+id = "8Qkl5wIP4PdLf_K_fjeKI"
+uri = "file://artifacts/multaqa/public/desk-3.png"
+type = "image"
+title = "Desk with monitor"
+
+[[generated]]
+id = "bWi1Bn4TwJCzQDYqI2KJi"
+uri = "file://artifacts/multaqa/public/room-1.png"
+type = "image"
+title = "Meeting room"
+
+[[generated]]
+id = "MQcha7b3IzJbE9CBOxg4F"
+uri = "file://artifacts/multaqa/public/room-2.png"
+type = "image"
+title = "Phone booth"
+
+[[generated]]
+id = "8PHToqqqtacZdiImo1ouI"
+uri = "file://artifacts/multaqa/public/room-3.png"
+type = "image"
+title = "Private office"

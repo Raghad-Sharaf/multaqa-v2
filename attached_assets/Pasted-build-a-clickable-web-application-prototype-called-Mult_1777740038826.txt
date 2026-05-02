@@ -1,0 +1,793 @@
+build a clickable web application prototype called Multaqa  — 
+
+a coworking space seat and room booking platform. Users come to browse available desks and rooms, choose one, and book it in advance so their spot is guaranteed when they arrive.
+
+═══════════════════════════════════════════════════════════
+
+PRODUCT CONTEXT
+
+═══════════════════════════════════════════════════════════
+
+Product name: Multaqa 
+
+Tagline: Your seat. Secured.
+
+Platform: Responsive web application (desktop-first, mobile-friendly)
+
+Language: English (Arabic support planned for a later phase)
+
+The core problem: Remote workers, freelancers, and students in Palestine 
+
+have no digital way to see real-time seat availability or book a workspace 
+
+in advance. They walk in to find spaces full, book via WhatsApp with no 
+
+confirmation, or give up entirely. Maqarr solves this by letting users 
+
+browse, choose, and confirm their exact seat or room before they leave home.
+
+Target users:
+
+- Remote workers and freelancers (primary) — need reliable WiFi, quiet 
+
+  zones, advance booking, price transparency
+
+- Students — need affordable day passes, quiet study environment
+
+- Small teams — need meeting rooms or adjacent desks booked together
+
+- Space admin (internal) — manages all bookings, availability, and 
+
+  unpaid cash reservations across both locations
+
+═══════════════════════════════════════════════════════════
+
+VISUAL STYLE & DESIGN SYSTEM
+
+═══════════════════════════════════════════════════════════
+
+Style: Clean, modern, professional, trustworthy. Bold and energetic without being aggressive. Think a well-designed SaaS product with strong brand presence — confident use of color, generous whitespace, clear hierarchy.
+
+Color palette (use same color codes provided but feel free to adjust where to use them where needed and for better result):
+
+Primary #FF5100 (used for all primary 
+
+buttons, active states, key CTAs, links, and highlights)
+
+Dark / Navy: #001279 (deep navy blue — used for navigation background, 
+
+headings, sidebar, dark section backgrounds, and text on light surfaces, CTA color)
+
+Mid / Secondary text: #535060 (muted dark gray-purple — used for body 
+
+text, secondary labels, descriptions, placeholder text, and 
+
+less prominent UI elements)
+
+White: #FFFFFF (main page background, card backgrounds, 
+
+input field backgrounds)
+
+ Derived supporting colors (generate from the palette above):
+
+- Light orange tint: #FFF1EB (very light #FF5100 tint — 
+
+  used for card hover states, selected states, subtle backgrounds)
+
+- Light navy tint: #E8EBFF (very light #001279 tint — 
+
+  used for info banners, admin section backgrounds, 
+
+  secondary card fills)
+
+- Border color: #E0E0E0 (neutral light gray for card borders, 
+
+  dividers, input borders)
+
+- Success green: #1A7A4A (used only for "Available" status 
+
+  badges and confirmed payment states — 
+
+  not part of main palette but needed functionally)
+
+- Error red: #CC1A00 (used only for overdue/unpaid alerts, 
+
+  error messages, and unavailable states — 
+
+  a darker shade of the primary to signal urgency)
+
+Typography: Clean sans-serif. Use Inter or a similar modern font.
+
+Navigation and headings use #001279 (navy).
+
+Body text uses #535060 (mid gray).
+
+CTA buttons use #FF5100 background with #FFFFFF text.
+
+Secondary buttons use #001279 background with #FFFFFF text 
+
+or #001279 border with #001279 text on white background.
+
+Rounded corners on cards and buttons (8px radius). 
+
+Subtle box shadows. Generous whitespace. No clutter.
+
+Seat color coding (used on floor plan and seat cards):
+
+- Blue (#001279 background, white text) = Deep Work / No Talking zone
+
+- Orange (#FF5100 background, white text) = Calls / Zoom Allowed zone
+
+- Red (#CC1A00) = Unavailable / Reserved / Under Maintenance
+
+- Green (#1A7A4A) = Available
+
+═══════════════════════════════════════════════════════════
+
+USER ROLES
+
+═══════════════════════════════════════════════════════════
+
+Role 1: Guest User (not logged in)
+
+- Can browse all desks and rooms
+
+- Can view desk and room details
+
+- Can complete a full booking by entering email only — NO registration 
+
+  required. Guest checkout is a core feature.
+
+- Receives booking confirmation via email
+
+- Cannot access My Reservations dashboard (managed via email link only)
+
+Role 2: Registered User (logged in)
+
+- All guest capabilities plus:
+
+- Access to My Reservations dashboard
+
+- Can modify or cancel bookings
+
+- Can download booking receipts
+
+- Can choose to hide identity from "Who's in the Space Today" board 
+
+  (anonymous booking toggle)
+
+Role 3: Admin (logged in with admin role)
+
+- Separate admin dashboard
+
+- View and manage all bookings across both locations
+
+- Block seats for maintenance
+
+- Create or cancel bookings on behalf of users
+
+- Mark cash bookings as paid
+
+- View unpaid cash bookings list with deadlines
+
+- Control role-based access (e.g., mark rooms as admin-only)
+
+═══════════════════════════════════════════════════════════
+
+SCREENS TO BUILD
+
+═══════════════════════════════════════════════════════════
+
+Build ALL of the following screens. Every screen must be fully 
+
+designed with realistic placeholder content — no lorem ipsum, 
+
+use real-looking desk names, room names, prices in ILS (Israeli 
+
+New Shekel), and realistic amenity lists.
+
+── USER-FACING SCREENS ──────────────────────────────────
+
+Screen 1: Homepage / Landing
+
+- Multaqa logo and navigation (Browse Desks | Browse Rooms | 
+
+  Log In | Sign Up)
+
+- Hero section with tagline: "Your seat. Secured." and 
+
+  two CTAs: "Browse Desks" and "Browse Rooms"
+
+- Live occupancy counter: "18 of 30 seats available right now 
+
+  at Multaqa" — visible without login
+
+- Brief "How it works" section: 3 steps — Browse → Book → Arrive
+
+- Trust signals section: "Verified spaces. Real photos. 
+
+  Transparent pricing."
+
+Screen 2: Desk Browsing Page
+
+- Filter bar: by zone (Deep Work | Calls Allowed), by desk type 
+
+  (Flex Desk | Hot Desk | Dedicated Desk), by amenity 
+
+  (Window | Monitor | Standing Desk)
+
+- Grid of desk cards. Each card shows:
+
+  * Real photo of the desk
+
+  * Desk name (e.g., "Desk A-3", "Window Seat B-7")
+
+  * Desk type badge (Flex / Hot / Dedicated)
+
+  * Zone color badge (Blue = Deep Work | Orange = Calls Allowed)
+
+  * Availability status (Available in green / Reserved in red)
+
+  * Price from X ILS/hour
+
+  * "View Details" button
+
+- Show minimum 8 desk cards with varied statuses 
+
+  (some available, some reserved)
+
+- Empty state when no desks match filter: 
+
+  "No desks match your filters. Try adjusting your search."
+
+Screen 3: Desk Detail Page
+
+- Large photo at top (or photo carousel if multiple)
+
+- Desk name and type badge
+
+- Zone indicator with color and label 
+
+  (e.g., "Deep Work Zone — No Talking")
+
+- WiFi speed tier badge (Fast / Good / Basic)
+
+- Full amenities list with icons: 
+
+  Power outlets ✓ | Window seat ✓ | External monitor ✓ | 
+
+  Standing desk option ✗ | Phone locker ✗
+
+- Availability status (Available / Reserved — updates in real time)
+
+- Seat-level reviews: star rating + short user comments 
+
+  (e.g., "Great WiFi here, stayed all day" — Khalid, Oct 2025)
+
+- Primary CTA button: "Book This Desk" (green, prominent, sticky)
+
+- Secondary CTA: "Contact via WhatsApp" (smaller, below primary)
+
+Screen 4: Room Browsing Page
+
+- Same location toggle and filter bar as desk browsing
+
+- Room type filter: Private Office | Meeting Room | Phone Booth
+
+- Grid of room cards. Each card shows:
+
+  * Photo
+
+  * Room name (e.g., "The Focus Room", "Meeting Room 2")
+
+  * Room type badge
+
+  * Capacity (e.g., "Up to 6 people")
+
+  * Availability status
+
+  * Price from X ILS/hour
+
+  * "View Details" button
+
+- Show minimum 4 room cards
+
+Screen 5: Room Detail Page
+
+- Same structure as Desk Detail Page but with room-specific content:
+
+- Capacity displayed prominently: "Fits up to 6 people"
+
+- Equipment list: Whiteboard ✓ | 65" Display ✓ | 
+
+  HDMI/USB-C ✓ | Video conferencing setup ✓ | 
+
+  Air conditioning ✓ | Soundproofed ✓
+
+- Pricing: Per hour and per half-day
+
+- "Book This Room" primary CTA
+
+- "Contact via WhatsApp" secondary CTA
+
+Screen 6: Booking Flow — Step 1 (Date & Time Selection)
+
+- Progress indicator at top: Step 1 of 3 — Step 2 of 3 — Step 3 of 3
+
+- Show which desk/room is being booked (name, photo thumbnail, price)
+
+- Date picker (calendar)
+
+- Time slot selector showing available slots for the selected date
+
+- For same-day bookings: only future slots shown, each slot shows 
+
+  remaining hours until closing (e.g., "3 hours left before closing")
+
+- Slot duration options: 1 hour | Half-day | Full day
+
+- Unavailable slots greyed out and not selectable
+
+- Selected slot highlighted in brand green
+
+- "Continue" button (disabled until date + slot selected)
+
+Screen 7: Booking Flow — Step 2 (Price Review & Guest Details)
+
+- Progress indicator: Step 2 of 3
+
+- Price summary card:
+
+  * Desk/Room name
+
+  * Date and time slot selected
+
+  * Duration
+
+  * Rate applied
+
+  * Total price in ILS — clear, no hidden fees
+
+- Guest details section (shown for non-logged-in users):
+
+  * Email address field (required)
+
+  * Label: "We'll send your confirmation here. 
+
+    No account required."
+
+- For logged-in users: email pre-filled, section collapsed
+
+- Payment method selection:
+
+  * Cash — Pay on-site within 3 days (with info icon explaining 
+
+    the policy)
+
+- "Confirm Booking" button (green, prominent)
+
+- Cancellation policy note below button: 
+
+  "Free cancellation up to 2 hours before your booking starts."
+
+Screen 8: Booking Confirmation Screen
+
+- Large green checkmark icon at top
+
+- Heading: "You're all set!"
+
+- Booking reference number displayed prominently 
+
+  (e.g., "Booking #MQR-20241
+
+- Reservation summary:
+
+  * Desk/Room name and location
+
+  * Date and time
+
+  * Duration and total price
+
+  * Payment method: Cash — due on-site by [date + 3 days]
+
+  * Payment deadline shown in amber/gold color
+
+- "A confirmation email has been sent to [email]"
+
+- For guest users: non-intrusive prompt: 
+
+  "Save your booking history — create a free account." 
+
+  with "Create Account" button (secondary, not forced)
+
+- "Browse More Desks" link
+
+Screen 9: My Reservations Dashboard (logged-in users only)
+
+- Two tabs: "Upcoming" and "Past"
+
+- Upcoming tab shows booking cards, each containing:
+
+  * Desk/Room name and location
+
+  * Date, time, duration
+
+  * Booking reference number
+
+  * Payment status badge: 
+
+    "Paid" (green) or "Cash Due by [date]" (amber)
+
+  * Two action buttons: "Modify" and "Cancel"
+
+- Past tab shows completed and cancelled bookings with status labels
+
+- Empty state: "No bookings yet. Find your perfect desk."
+
+- Each booking card has a "Download Receipt" link
+
+Screen 10: Modify Booking Flow
+
+- Pre-filled with existing booking details
+
+- Date picker and time slot selector same as booking flow Step 1
+
+- Current selection highlighted
+
+- "Save Changes" and "Keep Original" buttons
+
+- If selected slot is unavailable: 
+
+  inline error "This slot is no longer available."
+
+Screen 11: Login Page
+
+- Maqarr logo at top
+
+- Email and password fields
+
+- "Sign in with Google" button
+
+- "Forgot password?" link
+
+- Link: "Don't have an account? Sign up"
+
+- Note at bottom: "You can also book without an account — 
+
+  just enter your email at checkout."
+
+Screen 12: Registration Page
+
+- Email, password, confirm password fields
+
+- "Sign up with Google" button
+
+- Terms and conditions checkbox
+
+- Link: "Already have an account? Log in"
+
+Screen 13: Who's in the Space Today (opt-in, logged-in users)
+
+- Location toggle: Nablus | Ramallah
+
+- Date shown: "Today, [date]"
+
+- Grid of member cards showing: name, field/role 
+
+  (e.g., "Rami — Software Developer")
+
+- Anonymous entries show: "Anonymous Member"
+
+- Count at top: "12 members in the space today"
+
+- Toggle for logged-in user: "Show my name today" (on/off)
+
+── ADMIN SCREENS ─────────────────────────────────────────
+
+Screen 14: Admin Dashboard — Overview
+
+- Admin navigation sidebar: 
+
+  Overview | All Bookings | Unpaid Cash | Seat Management | 
+
+  Room Management | Analytics (coming soon)
+
+- Overview cards at top:
+
+  * Total bookings today
+
+  * Seats occupied right now
+
+  * Unpaid cash bookings (with count, in red if any)
+
+  * Revenue this week
+
+- Location toggle: Nablus | Ramallah
+
+- Recent bookings table (last 10): user name/email, 
+
+  desk/room, date, time, payment status, actions
+
+Screen 15: Admin — All Bookings
+
+- Full bookings table with columns: 
+
+  Booking ID | User | Desk/Room | Location | Date | Time | 
+
+  Payment Status | Booking Status | Actions
+
+- Filter by: location, date range, payment status, booking status
+
+- Action buttons per row: View | Cancel | Mark as Paid
+
+- Search bar by user name or booking ID
+
+Screen 16: Admin — Unpaid Cash Bookings
+
+- List of all cash bookings where payment has not been confirmed
+
+- Columns: User | Desk/Room | Booking Date | Payment Deadline | 
+
+  Days Remaining | Actions
+
+- Rows sorted by most urgent first (fewest days remaining)
+
+- Overdue rows highlighted in red
+
+- "Mark as Paid" button per row
+
+- "Send Reminder" button per row
+
+Screen 17: Admin — Seat Management
+
+- Visual list of all desks at selected location
+
+- Each desk row shows: Desk name | Type | Zone | 
+
+  Current Status | Actions
+
+- Actions: Block for Maintenance | Set as Admin-Only | Edit Details
+
+- Blocked desks shown with red "Maintenance" badge
+
+- "Add New Desk" button at top
+
+Screen 18: Admin — Create Booking on Behalf of User
+
+- Form: User name | User email | Select desk or room | 
+
+  Date | Time slot | Payment method
+
+- "Create Booking" button
+
+- Confirmation: "Booking created. Confirmation email 
+
+  sent to [email]."
+
+═══════════════════════════════════════════════════════════
+
+MAIN CLICKABLE FLOWS TO CONNECT
+
+═══════════════════════════════════════════════════════════
+
+Connect all screens with working click interactions 
+
+for the following flows:
+
+Flow 1 — Guest Desk Booking (most important flow):
+
+Homepage → click "Browse Desks" → Desk Browsing Page → 
+
+click "View Details" on any available desk → Desk Detail Page → 
+
+click "Book This Desk" → Booking Flow Step 1 (date + time) → 
+
+click "Continue" → Booking Flow Step 2 (review + email entry) → 
+
+click "Confirm Booking" → Booking Confirmation Screen
+
+Flow 2 — Room Booking:
+
+Homepage → click "Browse Rooms" → Room Browsing Page → 
+
+click "View Details" → Room Detail Page → 
+
+click "Book This Room" → Booking Flow Step 1 → 
+
+click "Continue" → Booking Flow Step 2 → 
+
+click "Confirm Booking" → Booking Confirmation Screen
+
+Flow 3 — Registered User manages reservations:
+
+Login Page → log in → My Reservations Dashboard → 
+
+click "Modify" on a booking → Modify Booking Flow → 
+
+confirm change → back to My Reservations Dashboard
+
+Flow 4 — Admin manages unpaid cash bookings:
+
+Admin Dashboard Overview → click "Unpaid Cash Bookings" → 
+
+Unpaid Cash Bookings Screen → click "Mark as Paid" → 
+
+booking status updates to Paid → removed from unpaid list
+
+Flow 5 — Admin blocks a seat:
+
+Admin Dashboard → click "Seat Management" → 
+
+Seat Management Screen → click "Block for Maintenance" 
+
+on a desk → desk status changes to "Maintenance" → 
+
+desk shows as unavailable on the user-facing Desk Browsing Page
+
+Flow 6 — Login and view reservations:
+
+Homepage → click "Log In" → Login Page → 
+
+enter credentials → My Reservations Dashboard → 
+
+click on a booking → see full booking details
+
+═══════════════════════════════════════════════════════════
+
+KEY BEHAVIORS & INTERACTIONS
+
+═══════════════════════════════════════════════════════════
+
+1. Real-time availability simulation: When a desk is clicked 
+
+   and booked in the prototype, its status on the browsing page 
+
+   should reflect "Reserved." If full simulation is not possible, 
+
+   show desks in mixed states (some available, some reserved) 
+
+   to demonstrate the concept visually.
+
+2. Location toggle: When switching between Nablus and Ramallah 
+
+   on any browsing page, the content refreshes to show that 
+
+   location's desks and rooms. Use different placeholder data 
+
+   for each location.
+
+3. Same-day time slot filtering: On the date picker, if today 
+
+   is selected, only future time slots are shown. Past slots 
+
+   are greyed out and not clickable. Each available slot shows 
+
+   remaining hours until closing 
+
+   (e.g., "3 hours left before closing").
+
+4. Guest checkout: On Booking Flow Step 2, if the user is 
+
+   not logged in, the email field is shown and required. 
+
+   If logged in, the email is pre-filled and the field 
+
+   is collapsed or read-only.
+
+5. Cash payment deadline: On the Booking Confirmation Screen 
+
+   and in My Reservations Dashboard, the payment deadline 
+
+   (booking date + 3 days) is always shown in amber/gold 
+
+   color with clear text: "Pay on-site by [date]."
+
+6. Admin-only room: If a room is marked "Admin-Only" in 
+
+   Seat Management, it should not appear on the user-facing 
+
+   Room Browsing Page.
+
+7. Booking reference format: Use the format MQR-XXXXX 
+
+   (e.g., MQR-20491) for all booking reference numbers 
+
+   shown in the prototype.
+
+8. Navigation: 
+
+   - User-facing pages: top navigation bar with 
+
+     Maqarr logo (left), Browse Desks | Browse Rooms 
+
+     links (center), and Log In | Sign Up (right). 
+
+     When logged in: replace Log In/Sign Up with 
+
+     user avatar + "My Bookings" link.
+
+   - Admin pages: left sidebar navigation, 
+
+     no top nav from user-facing site.
+
+9. Responsive: All user-facing screens must look good on 
+
+   mobile (375px width) and desktop (1280px width).
+
+10. Placeholder data to use:
+
+    Desks: Desk A-1 through A-8 at Nablus, Desk B-1 through 
+
+    B-6 at Ramallah. Mix of Flex, Hot, and Dedicated types. 
+
+    Mix of Deep Work and Calls Allowed zones. 
+
+    Prices: 15 ILS/hour, 50 ILS/half-day, 85 ILS/full-day.
+
+    Rooms: "The Focus Room" (capacity 4), "Meeting Room 1" 
+
+    (capacity 8), "The Pod" (capacity 2) at Nablus. 
+
+    Prices: 40 ILS/hour, 140 ILS/half-day.
+
+    Users: Use names like Khalid, Tala, Omar, Sara, Rami 
+
+    as placeholder booking names.
+
+    Locations: 
+
+    Nablus — Building Al-Maseef, Floor 3, Nablus City Center
+
+    Ramallah — Al-Bireh Commercial Center, Floor 2, Ramallah
+
+═══════════════════════════════════════════════════════════
+
+WHAT NOT TO BUILD
+
+═══════════════════════════════════════════════════════════
+
+Do not build:
+
+- Any payment processing or real payment gateway integration
+
+- Real email sending
+
+- Real-time database (simulate availability with 
+
+  hardcoded states)
+
+- Analytics charts (mark as "Coming Soon" placeholder)
+
+- The VR feature
+
+- The AI chat assistant
+
+- The dynamic pricing engine
+
+- The mobile app (web responsive is sufficient)
+
+- Multi-language toggle (mark as "Coming Soon")
+
+═══════════════════════════════════════════════════════════
+
+TONE & FEEL
+
+═══════════════════════════════════════════════════════════
+
+Multaqa should feel trustworthy, local, and professional. 
+
+It is built for Palestinians — it should feel familiar and 
+
+warm, not like a generic global SaaS product. Every label, 
+
+button, and empty state should speak directly to the user 
+
+in plain, friendly language. No jargon. No corporate tone. 
+
+The product should feel like it was made specifically 
+
+for them — because it was.
+
+Primary emotion the user should feel when using it: 
+
+Confidence. "I know my seat is waiting for me."
