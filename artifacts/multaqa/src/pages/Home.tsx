@@ -78,7 +78,7 @@ export default function Home() {
   const totalDesks = desks.filter((d) => d.location === currentLocation).length;
 
   return (
-    <UserLayout>
+    <UserLayout footerVariant="white">
       <OnboardingModal />
 
       {/* ── Hero ── */}
@@ -203,7 +203,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-sm font-bold leading-snug" style={{ color: "#001279" }}>
-                    {availableDesks} of {totalDesks} seats available right now
+                    18 of 30 seats available right now
                   </p>
                   <p className="text-xs mt-0.5" style={{ color: "#535060" }}>
                     at Multaqa {currentLocation} · updated just now
@@ -394,20 +394,32 @@ export default function Home() {
             <Link href="/desks">
               <Button
                 size="lg"
-                className="h-14 px-10 text-base text-white font-semibold rounded-xl border-0"
-                style={{ background: "#FF5100", boxShadow: "0 8px 28px rgba(255,81,0,0.40)" }}
+                className="h-12 px-7 rounded-xl text-white font-semibold text-sm flex items-center gap-2 border-0"
+                style={{ background: "#FF5100", boxShadow: "0 6px 20px rgba(255,81,0,.28)" }}
                 onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
                 onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}
               >
-                Browse Desks
+                Browse Desks <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
             <Link href="/rooms">
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 px-10 text-base rounded-xl font-semibold text-white hover:bg-white/10 transition-colors"
-                style={{ borderColor: "rgba(255,255,255,0.25)" }}
+                className="h-12 px-7 rounded-xl font-semibold text-sm transition-colors"
+                style={{ color: "#001279", borderColor: "rgba(0,18,121,0.35)", background: "transparent" }}
+                onMouseEnter={e => {
+                  const b = e.currentTarget as HTMLButtonElement;
+                  b.style.background = "#001279";
+                  b.style.color = "white";
+                  b.style.borderColor = "#001279";
+                }}
+                onMouseLeave={e => {
+                  const b = e.currentTarget as HTMLButtonElement;
+                  b.style.background = "transparent";
+                  b.style.color = "#001279";
+                  b.style.borderColor = "rgba(0,18,121,0.35)";
+                }}
               >
                 Browse Rooms
               </Button>

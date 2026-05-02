@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
 import { useAppContext, Zone, DeskType } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { MapPin, Wifi, Monitor, BatteryCharging, Heart, BellRing, SlidersHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
 import { WaitlistModal } from "@/components/WaitlistModal";
@@ -55,74 +54,77 @@ export default function Desks() {
         />
       )}
 
-      <div className="max-w-6xl mx-auto px-6 md:px-8 pt-10 pb-4">
-        {/* Page header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-1" style={{ color: "#001279" }}>Browse Desks</h1>
-            <p className="text-sm" style={{ color: "#535060" }}>Find your perfect spot. Available now.</p>
+      {/* Header + Filters — full container width */}
+      <div className="w-full border-b" style={{ borderColor: "rgba(0,18,121,0.06)" }}>
+        <div className="max-w-6xl mx-auto px-6 md:px-8 pt-10 pb-6">
+          {/* Page header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-1" style={{ color: "#001279" }}>Browse Desks</h1>
+              <p className="text-sm" style={{ color: "#535060" }}>Find your perfect spot. Available now.</p>
+            </div>
+
+            {/* Location switcher */}
+            <div
+              className="inline-flex items-center gap-1 p-1 rounded-xl border bg-white shrink-0"
+              style={{ borderColor: "rgba(0,18,121,0.15)" }}
+            >
+              <span className="pl-2 pr-1"><MapPin className="w-4 h-4" style={{ color: "#535060" }} /></span>
+              {(["Nablus", "Ramallah"] as const).map(loc => (
+                <button
+                  key={loc}
+                  onClick={() => setCurrentLocation(loc)}
+                  className="px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors"
+                  style={
+                    currentLocation === loc
+                      ? { background: "#001279", color: "white" }
+                      : { color: "#535060" }
+                  }
+                >
+                  {loc}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Location switcher */}
+          {/* Filter bar — full width of container */}
           <div
-            className="inline-flex items-center gap-1 p-1 rounded-xl border bg-white"
-            style={{ borderColor: "rgba(0,18,121,0.15)" }}
+            className="w-full bg-white rounded-xl border p-4 space-y-3"
+            style={{ borderColor: "rgba(0,18,121,0.1)" }}
           >
-            <span className="pl-2 pr-1"><MapPin className="w-4 h-4" style={{ color: "#535060" }} /></span>
-            {(["Nablus", "Ramallah"] as const).map(loc => (
-              <button
-                key={loc}
-                onClick={() => setCurrentLocation(loc)}
-                className="px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors"
-                style={
-                  currentLocation === loc
-                    ? { background: "#001279", color: "white" }
-                    : { color: "#535060" }
-                }
-              >
-                {loc}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Filter bar */}
-        <div
-          className="bg-white rounded-xl border p-4 space-y-3 mb-8"
-          style={{ borderColor: "rgba(0,18,121,0.1)" }}
-        >
-          <div className="flex items-center flex-wrap gap-2">
-            <SlidersHorizontal className="w-4 h-4 shrink-0" style={{ color: "#535060" }} />
-            <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Zone:</span>
-            {(["All", "Deep Work", "Calls Allowed"] as const).map(z => (
-              <Pill key={z} label={z} active={filterZone === z} onClick={() => setFilterZone(z)} />
-            ))}
-            <div className="w-px h-4 bg-gray-200 mx-1 hidden sm:block" />
-            <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Type:</span>
-            {(["All", "Flex Desk", "Hot Desk", "Dedicated Desk"] as const).map(t => (
-              <Pill key={t} label={t} active={filterType === t} onClick={() => setFilterType(t as DeskType | "All")} />
-            ))}
-          </div>
-          <div className="flex items-center flex-wrap gap-2">
-            <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Amenity:</span>
-            {(["All", "Window", "Monitor", "Standing Desk"] as const).map(a => (
-              <Pill key={a} label={a} active={filterAmenity === a} onClick={() => setFilterAmenity(a)} />
-            ))}
-            {favorites.length > 0 && (
-              <span className="ml-auto text-xs font-medium flex items-center gap-1" style={{ color: "#FF5100" }}>
-                <Heart className="w-3.5 h-3.5 fill-current" /> {favorites.length} favourited
-              </span>
-            )}
+            <div className="flex items-center flex-wrap gap-2">
+              <SlidersHorizontal className="w-4 h-4 shrink-0" style={{ color: "#535060" }} />
+              <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Zone:</span>
+              {(["All", "Deep Work", "Calls Allowed"] as const).map(z => (
+                <Pill key={z} label={z} active={filterZone === z} onClick={() => setFilterZone(z)} />
+              ))}
+              <div className="w-px h-4 bg-gray-200 mx-1 hidden sm:block" />
+              <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Type:</span>
+              {(["All", "Flex Desk", "Hot Desk", "Dedicated Desk"] as const).map(t => (
+                <Pill key={t} label={t} active={filterType === t} onClick={() => setFilterType(t as DeskType | "All")} />
+              ))}
+              {favorites.length > 0 && (
+                <span className="ml-auto text-xs font-medium flex items-center gap-1 shrink-0" style={{ color: "#FF5100" }}>
+                  <Heart className="w-3.5 h-3.5 fill-current" /> {favorites.length} favourited
+                </span>
+              )}
+            </div>
+            <div className="flex items-center flex-wrap gap-2">
+              <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Amenity:</span>
+              {(["All", "Window", "Monitor", "Standing Desk"] as const).map(a => (
+                <Pill key={a} label={a} active={filterAmenity === a} onClick={() => setFilterAmenity(a)} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Cards grid */}
-      <div className="max-w-6xl mx-auto px-6 md:px-8 pb-16">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 py-10">
         {filteredDesks.length === 0 ? (
           <div className="text-center py-24 bg-white rounded-xl border" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
             <h3 className="text-xl font-bold mb-2" style={{ color: "#001279" }}>No desks found</h3>
-            <p className="text-sm mb-6" style={{ color: "#535060" }}>Try adjusting your filters to see more options.</p>
+            <p className="text-sm mb-6" style={{ color: "#535060" }}>Try adjusting your filters.</p>
             <Button variant="outline" onClick={() => { setFilterZone("All"); setFilterType("All"); setFilterAmenity("All"); }}>
               Clear Filters
             </Button>
@@ -137,47 +139,50 @@ export default function Desks() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: idx * 0.04 }}
-                  className="group bg-white rounded-2xl border overflow-hidden flex flex-col transition-all hover:shadow-lg hover:-translate-y-0.5"
+                  className="group bg-white rounded-2xl border-2 overflow-hidden flex flex-col transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
                   style={{ borderColor: "rgba(0,18,121,0.09)" }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = "#FF5100")}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(0,18,121,0.09)")}
                 >
                   {/* Image */}
-                  <div className="relative h-44 overflow-hidden bg-muted shrink-0">
+                  <div className="relative h-44 overflow-hidden shrink-0">
                     <img
                       src={desk.image} alt={desk.name}
                       className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${desk.status === "Maintenance" ? "grayscale opacity-70" : ""}`}
                     />
+                    {/* Zone badge */}
                     <div className="absolute top-2.5 left-2.5">
                       <span
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+                        className="text-[11px] font-bold px-2.5 py-1 rounded-full text-white"
                         style={{ background: desk.zone === "Deep Work" ? "#001279" : "#FF5100" }}
                       >{desk.zone}</span>
                     </div>
+                    {/* Status badge */}
                     <div className="absolute top-2.5 right-2.5">
                       <span
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-full border bg-white"
+                        className="text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
                         style={{
-                          color: desk.status === "Available" ? "#1A7A4A" : desk.status === "Reserved" ? "#CC1A00" : "#D97706",
-                          borderColor: desk.status === "Available" ? "#1A7A4A" : desk.status === "Reserved" ? "#CC1A00" : "#D97706",
+                          background: desk.status === "Available" ? "#1A7A4A" : desk.status === "Reserved" ? "#CC2200" : "#D97706",
+                          color: "white",
                         }}
-                      >{desk.status}</span>
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-white/80 shrink-0" />
+                        {desk.status}
+                      </span>
                     </div>
+                    {/* Heart */}
                     <button
                       onClick={e => { e.preventDefault(); toggleFavorite(desk.id); }}
-                      className="absolute bottom-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+                      className="absolute bottom-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow hover:scale-110 transition-transform"
                     >
-                      <Heart className={`w-3.5 h-3.5 ${isFav ? "fill-current text-red-500" : "text-gray-400"}`} />
+                      <Heart className={`w-3.5 h-3.5 ${isFav ? "fill-red-500 text-red-500" : "text-gray-400"}`} />
                     </button>
-                    {isFav && (
-                      <div className="absolute bottom-2.5 left-2.5 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5" style={{ background: "#FF5100" }}>
-                        ★ Favourite
-                      </div>
-                    )}
                   </div>
 
                   {/* Body */}
-                  <div className="p-4 flex-1 flex flex-col gap-3">
+                  <div className="p-4 flex-1 flex flex-col gap-2.5">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-bold text-base" style={{ color: "#001279" }}>{desk.name}</h3>
+                      <h3 className="font-bold text-base leading-tight" style={{ color: "#001279" }}>{desk.name}</h3>
                       <span
                         className="text-[11px] font-medium px-2 py-0.5 rounded-md shrink-0"
                         style={{ background: "#F5F5F5", color: "#535060" }}
@@ -189,6 +194,7 @@ export default function Desks() {
                         <span key={am} className="text-[11px] flex items-center gap-1 px-2 py-0.5 rounded-md" style={{ background: "#F5F7FF", color: "#535060" }}>
                           {am.toLowerCase().includes("monitor") && <Monitor className="w-3 h-3" />}
                           {am.toLowerCase().includes("power") && <BatteryCharging className="w-3 h-3" />}
+                          {am.toLowerCase().includes("window") && <span>⊞</span>}
                           {am}
                         </span>
                       ))}
@@ -201,34 +207,30 @@ export default function Desks() {
                       <div>
                         <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: "#535060" }}>From</p>
                         <p className="font-bold" style={{ color: "#001279" }}>
-                          {desk.priceHour} ILS <span className="text-xs font-normal" style={{ color: "#535060" }}>/hr</span>
+                          {desk.priceHour} ILS<span className="text-xs font-normal" style={{ color: "#535060" }}>/hr</span>
                         </p>
                       </div>
 
                       {desk.status === "Available" ? (
                         <Link href={`/desks/${desk.id}`}>
-                          <button
-                            className="text-sm font-semibold px-4 py-1.5 rounded-lg text-white transition-colors"
-                            style={{ background: "#FF5100" }}
-                            onMouseEnter={e => (e.currentTarget.style.background = "#e04800")}
-                            onMouseLeave={e => (e.currentTarget.style.background = "#FF5100")}
+                          <span
+                            className="text-sm font-semibold flex items-center gap-0.5 transition-opacity hover:opacity-75"
+                            style={{ color: "#FF5100" }}
                           >
-                            View Details
-                          </button>
+                            View Details →
+                          </span>
                         </Link>
                       ) : desk.status === "Reserved" ? (
                         <button
                           onClick={() => setWaitlistTarget({ id: desk.id, name: desk.name, type: "desk" })}
-                          className="text-sm font-semibold px-3 py-1.5 rounded-lg border flex items-center gap-1.5 transition-colors"
-                          style={{ color: "#FF5100", borderColor: "#FF5100" }}
+                          className="text-sm font-semibold flex items-center gap-1.5"
+                          style={{ color: "#FF5100" }}
                         >
                           <BellRing className="w-3.5 h-3.5" /> Waitlist
                         </button>
                       ) : (
                         <Link href={`/desks/${desk.id}`}>
-                          <button className="text-sm font-medium px-3 py-1.5 rounded-lg border" style={{ color: "#535060", borderColor: "rgba(0,0,0,0.15)" }}>
-                            View
-                          </button>
+                          <span className="text-sm font-semibold" style={{ color: "#535060" }}>View →</span>
                         </Link>
                       )}
                     </div>

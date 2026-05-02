@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useAppContext } from "@/context/AppContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -7,21 +8,25 @@ import { Heart, LifeBuoy, BookOpen } from "lucide-react";
 export function Navbar() {
   const { currentUser, setCurrentUser, favorites } = useAppContext();
   const [, setLocation] = useLocation();
+  const [scrolled, setScrolled] = useState(false);
 
-  const handleLogout = () => {
-    setCurrentUser(null);
-    setLocation("/");
-  };
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <nav
-      className="sticky top-0 z-50 border-b"
+      className="sticky top-0 z-50 border-b transition-all duration-200"
       style={{
-        backgroundColor: "color-mix(in oklab, var(--background) 95%, transparent)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-        borderBottomColor: "rgba(0,18,121,0.08)",
-        boxShadow: "0 1px 16px rgba(0,0,0,0.05)",
+        backgroundColor: scrolled
+          ? "color-mix(in oklab, var(--background) 88%, transparent)"
+          : "color-mix(in oklab, var(--background) 97%, transparent)",
+        backdropFilter: scrolled ? "blur(8px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(8px)" : "none",
+        borderBottomColor: scrolled ? "rgba(0,18,121,0.1)" : "rgba(0,18,121,0.05)",
+        boxShadow: scrolled ? "0 1px 20px rgba(0,0,0,0.07)" : "none",
       }}
     >
       <div className="max-w-6xl mx-auto px-6 md:px-8 py-3 flex items-center justify-between">
@@ -153,4 +158,9 @@ export function Navbar() {
       </div>
     </nav>
   );
+
+  function handleLogout() {
+    setCurrentUser(null);
+    setLocation("/");
+  }
 }
