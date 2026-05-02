@@ -20,22 +20,18 @@ export function Navbar() {
     <nav
       className="sticky top-0 z-50 border-b transition-all duration-200"
       style={{
-        backgroundColor: scrolled
-          ? "color-mix(in oklab, var(--background) 88%, transparent)"
-          : "color-mix(in oklab, var(--background) 97%, transparent)",
+        backgroundColor: scrolled ? "rgba(255,255,255,0.98)" : "rgba(255,255,255,0.95)",
         backdropFilter: scrolled ? "blur(8px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(8px)" : "none",
-        borderBottomColor: scrolled ? "rgba(0,18,121,0.1)" : "rgba(0,18,121,0.05)",
-        boxShadow: scrolled ? "0 1px 20px rgba(0,0,0,0.07)" : "none",
+        borderBottomColor: scrolled ? "rgba(0,18,121,0.1)" : "rgba(0,18,121,0.06)",
+        boxShadow: scrolled ? "0 1px 16px rgba(0,0,0,0.06)" : "none",
       }}
     >
-      <div className="max-w-6xl mx-auto px-6 md:px-8 py-3 flex items-center justify-between">
-        {/* Logo + links */}
-        <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="Multaqa" className="h-14 w-auto" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-6 md:gap-8">
+          <Link href="/" className="flex items-center shrink-0">
+            <img src="/logo.png" alt="Multaqa" className="h-10 sm:h-14 w-auto" />
           </Link>
-
           <div className="hidden md:flex items-center gap-6">
             {[
               { href: "/desks", label: "Browse Desks" },
@@ -46,7 +42,7 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium flex items-center gap-1.5 transition-colors"
+                className="text-sm font-medium flex items-center gap-1.5 transition-colors whitespace-nowrap"
                 style={{ color: "#001279" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
@@ -57,50 +53,27 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {currentUser ? (
-            <div className="flex items-center gap-3">
-              <Link
-                href="/desks"
-                className="relative hidden md:flex items-center transition-colors"
-                title="My Favourites"
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link href="/desks" className="relative hidden md:flex items-center transition-colors" title="My Favourites"
                 style={{ color: "#001279" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
               >
                 <Heart className="w-5 h-5" />
                 {favorites.length > 0 && (
-                  <span
-                    className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center text-white"
-                    style={{ background: "#FF5100" }}
-                  >
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center text-white" style={{ background: "#FF5100" }}>
                     {favorites.length}
                   </span>
                 )}
               </Link>
-
-              <Link
-                href="/my-reservations"
-                className="text-sm font-medium hidden md:block transition-colors"
-                style={{ color: "#001279" }}
+              <Link href="/my-reservations" className="text-sm font-medium hidden md:block transition-colors" style={{ color: "#001279" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
               >
                 My Bookings
               </Link>
-
-              <Link
-                href="/onboarding"
-                className="hidden md:flex items-center gap-1 text-xs transition-colors"
-                title="Tutorial"
-                style={{ color: "#001279", opacity: 0.5 }}
-                onMouseEnter={e => { e.currentTarget.style.color = "#FF5100"; e.currentTarget.style.opacity = "1"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "#001279"; e.currentTarget.style.opacity = "0.5"; }}
-              >
-                <BookOpen className="w-4 h-4" />
-              </Link>
-
               <div className="flex items-center gap-2 cursor-pointer" onClick={() => setLocation("/my-reservations")}>
                 <Avatar className="w-8 h-8 border" style={{ borderColor: "#001279" + "33" }}>
                   <AvatarFallback className="text-white text-xs" style={{ background: "#FF5100" }}>
@@ -108,13 +81,7 @@ export function Navbar() {
                   </AvatarFallback>
                 </Avatar>
               </div>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLogout}
-                className="hidden md:flex text-sm font-medium transition-colors"
-                style={{ color: "#001279" }}
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="hidden md:flex text-sm font-medium" style={{ color: "#001279" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
               >
@@ -122,29 +89,22 @@ export function Navbar() {
               </Button>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
-              <Link
-                href="/onboarding"
-                className="hidden md:flex items-center gap-1 text-xs transition-colors"
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link href="/onboarding" className="hidden md:flex items-center gap-1 text-xs transition-colors"
                 style={{ color: "#001279", opacity: 0.6 }}
                 onMouseEnter={e => { e.currentTarget.style.color = "#FF5100"; e.currentTarget.style.opacity = "1"; }}
                 onMouseLeave={e => { e.currentTarget.style.color = "#001279"; e.currentTarget.style.opacity = "0.6"; }}
               >
                 <BookOpen className="w-4 h-4" /> Tour
               </Link>
-              <Link
-                href="/login"
-                className="text-sm font-medium hidden md:block transition-colors"
-                style={{ color: "#001279" }}
+              <Link href="/login" className="text-sm font-medium hidden md:block transition-colors" style={{ color: "#001279" }}
                 onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
                 onMouseLeave={e => (e.currentTarget.style.color = "#001279")}
               >
                 Log In
               </Link>
               <Link href="/register">
-                <Button
-                  size="sm"
-                  className="text-white font-semibold rounded-lg px-5 border-0"
+                <Button size="sm" className="text-white font-semibold rounded-lg px-4 sm:px-5 border-0 text-xs sm:text-sm"
                   style={{ background: "#FF5100" }}
                   onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
                   onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}

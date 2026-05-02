@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link, useRoute } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
 import { useAppContext } from "@/context/AppContext";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Users, CheckCircle2, MapPin, Heart, BellRing } from "lucide-react";
 import { NotFound } from "@/pages/not-found";
 import { WaitlistModal } from "@/components/WaitlistModal";
@@ -14,7 +12,6 @@ export default function RoomDetail() {
   const [showWaitlist, setShowWaitlist] = useState(false);
 
   if (!match || !params.id) return <NotFound />;
-
   const room = rooms.find(r => r.id === params.id);
   if (!room) return <NotFound />;
 
@@ -23,88 +20,88 @@ export default function RoomDetail() {
   return (
     <UserLayout>
       {showWaitlist && (
-        <WaitlistModal
-          itemId={room.id}
-          itemName={room.name}
-          itemType="room"
-          onClose={() => setShowWaitlist(false)}
-        />
+        <WaitlistModal itemId={room.id} itemName={room.name} itemType="room" onClose={() => setShowWaitlist(false)} />
       )}
 
-      <div className="bg-secondary text-white border-b border-border py-6">
-        <div className="container mx-auto px-6">
-          <Link href="/rooms" className="inline-flex items-center text-sm font-medium text-white/70 hover:text-white mb-4 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to all rooms
+      {/* Back bar */}
+      <div className="border-b py-4" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
+          <Link href="/rooms" className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors" style={{ color: "#535060" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#535060")}
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to all rooms
           </Link>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-10 max-w-6xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="rounded-2xl overflow-hidden border border-border shadow-sm h-[450px] relative">
+          <div className="lg:col-span-2 space-y-6">
+
+            {/* Image */}
+            <div className="rounded-2xl overflow-hidden border h-[220px] sm:h-[300px] relative" style={{ borderColor: "rgba(0,18,121,0.09)" }}>
               <img src={room.image} alt={room.name} className="w-full h-full object-cover" />
-              {/* Favourite button overlay */}
               <button
                 onClick={() => toggleFavorite(room.id)}
-                className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg border transition-all ${isFav ? "bg-primary border-primary" : "bg-white/90 border-white/20 hover:bg-white"}`}
-                title={isFav ? "Remove from favourites" : "Save as favourite"}
+                className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center shadow border transition-all"
+                style={isFav ? { background: "#FF5100", borderColor: "#FF5100" } : { background: "rgba(255,255,255,0.92)", borderColor: "rgba(255,255,255,0.3)" }}
               >
-                <Heart className={`w-5 h-5 ${isFav ? "fill-white text-white" : "text-muted-foreground"}`} />
+                <Heart className="w-4 h-4" style={isFav ? { fill: "white", color: "white" } : { color: "#535060" }} />
               </button>
               {isFav && (
-                <div className="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                <div className="absolute top-3 left-3 text-white text-[11px] font-bold px-2.5 py-1 rounded-full" style={{ background: "#FF5100" }}>
                   ★ Favourite
                 </div>
               )}
             </div>
 
+            {/* Title block */}
             <div>
-              <div className="flex flex-wrap gap-3 mb-4">
-                <Badge className="bg-primary text-white hover:bg-primary px-3 py-1 text-sm">
+              <div className="flex flex-wrap gap-2 mb-3">
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full text-white" style={{ background: "#FF5100" }}>
                   {room.type}
-                </Badge>
-                <Badge variant="outline" className={`font-semibold px-3 py-1 text-sm bg-white ${
-                  room.status === "Available" ? "text-success border-success" :
-                  room.status === "Reserved" ? "text-destructive border-destructive" :
-                  "text-warning border-warning"
-                }`}>
+                </span>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full text-white"
+                  style={{ background: room.status === "Available" ? "#1A7A4A" : room.status === "Reserved" ? "#CC2200" : "#D97706" }}>
                   {room.status}
-                </Badge>
-                <div className="flex items-center gap-2 bg-[#E8EBFF] text-secondary px-3 py-1 rounded-full text-sm font-semibold border border-[#001279]/10">
-                  <Users className="w-4 h-4" /> Fits up to {room.capacity} people
+                </span>
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full border"
+                  style={{ background: "#F0F2FF", color: "#001279", borderColor: "rgba(0,18,121,0.12)" }}>
+                  <Users className="w-3 h-3" /> Up to {room.capacity} people
                 </div>
               </div>
-
-              <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-3 tracking-tight">{room.name}</h1>
-              <p className="text-muted-foreground flex items-center gap-2 text-lg">
-                <MapPin className="w-5 h-5" /> Multaqa — {room.location}
+              <h1 className="font-bold mb-1.5" style={{ fontSize: "clamp(20px, 3vw, 28px)", color: "#001279" }}>{room.name}</h1>
+              <p className="flex items-center gap-1.5 text-[14px]" style={{ color: "#535060" }}>
+                <MapPin className="w-3.5 h-3.5" /> Multaqa — {room.location}
               </p>
             </div>
 
-            <div className="border-t border-border pt-8">
-              <h2 className="text-2xl font-bold text-secondary mb-6">Included Equipment</h2>
+            {/* Equipment */}
+            <div className="border-t pt-6" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+              <h2 className="font-bold mb-4" style={{ fontSize: "18px", color: "#001279" }}>Included Equipment</h2>
               {room.equipment.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-muted/50 p-6 rounded-xl border border-border">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-xl border" style={{ background: "oklch(97% .02 268)", borderColor: "rgba(0,18,121,0.07)" }}>
                   {room.equipment.map(eq => (
-                    <div key={eq} className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full bg-success/20 flex items-center justify-center shrink-0">
-                        <CheckCircle2 className="w-4 h-4 text-success" />
+                    <div key={eq} className="flex items-center gap-2.5">
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(26,122,74,0.12)" }}>
+                        <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#1A7A4A" }} />
                       </div>
-                      <span className="text-secondary font-medium">{eq}</span>
+                      <span className="text-[14px] font-medium" style={{ color: "#001279" }}>{eq}</span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground italic">Standard room setup.</p>
+                <p className="text-[14px] italic" style={{ color: "#535060" }}>Standard room setup.</p>
               )}
             </div>
 
-            <div className="border-t border-border pt-8 pb-8">
-              <h2 className="text-2xl font-bold text-secondary mb-4">About this space</h2>
-              <p className="text-muted-foreground leading-relaxed">
+            {/* About */}
+            <div className="border-t pt-6" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+              <h2 className="font-bold mb-3" style={{ fontSize: "18px", color: "#001279" }}>About this space</h2>
+              <p className="text-[14px] leading-relaxed" style={{ color: "#535060" }}>
                 The {room.name} is a premium {room.type.toLowerCase()} designed for privacy and productivity.
                 Whether you're hosting an important client meeting, running a team workshop, or need a quiet
                 space for deep work, this room provides the professional environment you need in the heart of {room.location}.
@@ -112,69 +109,82 @@ export default function RoomDetail() {
             </div>
           </div>
 
-          {/* Sticky Booking Card */}
+          {/* Booking Card */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white rounded-2xl border border-border shadow-xl p-8">
-              <h3 className="text-2xl font-bold text-secondary mb-2">Book {room.name}</h3>
-              <p className="text-sm text-muted-foreground mb-6">Choose your duration to see available times.</p>
+            <div className="sticky top-24 bg-white rounded-2xl border shadow-lg p-5" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
+              <h3 className="font-bold mb-1" style={{ fontSize: "18px", color: "#001279" }}>Book {room.name}</h3>
+              <p className="text-[12px] mb-5" style={{ color: "#535060" }}>Choose your duration to see available times.</p>
 
-              <div className="bg-muted rounded-xl p-4 space-y-4 mb-8 border border-border">
-                <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-muted-foreground font-medium">Per Hour</span>
-                  <span className="font-bold text-secondary text-lg">{room.priceHour} ILS</span>
-                </div>
-                {room.priceHalfDay && (
-                  <div className="flex justify-between items-center py-2 border-b border-border/50">
-                    <span className="text-muted-foreground font-medium">Half Day <span className="text-xs opacity-70">(4 hrs)</span></span>
-                    <span className="font-bold text-secondary text-lg">{room.priceHalfDay} ILS</span>
+              <div className="mb-5 rounded-xl border p-3 space-y-0" style={{ background: "oklch(97% .02 268)", borderColor: "rgba(0,18,121,0.07)" }}>
+                {[
+                  { label: "Per Hour", price: room.priceHour, note: "" },
+                  ...(room.priceHalfDay ? [{ label: "Half Day", price: room.priceHalfDay, note: "4 hrs" }] : []),
+                ].map((row, i, arr) => (
+                  <div key={row.label} className={`flex justify-between items-center py-2.5 ${i < arr.length - 1 ? "border-b" : ""}`} style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+                    <span className="text-[14px] font-medium" style={{ color: "#535060" }}>
+                      {row.label} {row.note && <span className="text-[11px] opacity-70">({row.note})</span>}
+                    </span>
+                    <span className="font-bold text-[14px]" style={{ color: "#001279" }}>{row.price} ILS</span>
                   </div>
-                )}
+                ))}
               </div>
 
               {room.status === "Available" ? (
-                <div className="space-y-3">
+                <div className="flex flex-col gap-3">
                   <Link href={`/book/step1?item=${room.id}&type=room`}>
-                    <Button size="lg" className="w-full bg-primary hover:bg-primary/90 text-white text-lg h-14 shadow-md shadow-primary/20">
-                      Select Date & Time
-                    </Button>
+                    <button
+                      className="w-full h-11 rounded-xl text-white text-[14px] font-semibold transition-colors"
+                      style={{ background: "#FF5100" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "#e04800")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "#FF5100")}
+                    >
+                      Book This Room
+                    </button>
                   </Link>
                   <button
                     onClick={() => toggleFavorite(room.id)}
-                    className={`w-full h-11 rounded-lg border text-sm font-medium flex items-center justify-center gap-2 transition-all ${isFav ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary"}`}
+                    className="w-full h-10 rounded-xl border text-[13px] font-medium flex items-center justify-center gap-2 transition-all"
+                    style={isFav
+                      ? { borderColor: "#FF5100", color: "#FF5100", background: "rgba(255,81,0,0.04)" }
+                      : { borderColor: "rgba(0,18,121,0.18)", color: "#535060" }
+                    }
+                    onMouseEnter={e => { if (!isFav) { e.currentTarget.style.borderColor = "#FF5100"; e.currentTarget.style.color = "#FF5100"; } }}
+                    onMouseLeave={e => { if (!isFav) { e.currentTarget.style.borderColor = "rgba(0,18,121,0.18)"; e.currentTarget.style.color = "#535060"; } }}
                   >
-                    <Heart className={`w-4 h-4 ${isFav ? "fill-primary" : ""}`} />
+                    <Heart className="w-3.5 h-3.5" style={isFav ? { fill: "#FF5100", color: "#FF5100" } : {}} />
                     {isFav ? "Saved as Favourite" : "Save as Favourite"}
                   </button>
                 </div>
               ) : room.status === "Reserved" ? (
-                <div className="space-y-3">
-                  <div className="bg-destructive/10 text-destructive p-4 rounded-lg text-center font-bold border border-destructive/20">
+                <div className="flex flex-col gap-3">
+                  <div className="text-center py-2.5 rounded-xl border text-[13px] font-semibold" style={{ background: "rgba(204,34,0,0.06)", color: "#CC2200", borderColor: "rgba(204,34,0,0.2)" }}>
                     Currently Reserved
                   </div>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full h-12 border-primary text-primary hover:bg-primary/5 flex items-center gap-2"
+                  <button
+                    className="w-full h-11 rounded-xl border text-[14px] font-semibold flex items-center justify-center gap-2 transition-colors"
+                    style={{ borderColor: "#FF5100", color: "#FF5100" }}
                     onClick={() => setShowWaitlist(true)}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,81,0,0.05)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
                   >
                     <BellRing className="w-4 h-4" /> Join Waitlist
-                  </Button>
+                  </button>
                   <button
                     onClick={() => toggleFavorite(room.id)}
-                    className={`w-full h-11 rounded-lg border text-sm font-medium flex items-center justify-center gap-2 transition-all ${isFav ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:border-primary/50"}`}
+                    className="w-full h-10 rounded-xl border text-[13px] font-medium flex items-center justify-center gap-2"
+                    style={isFav ? { borderColor: "#FF5100", color: "#FF5100", background: "rgba(255,81,0,0.04)" } : { borderColor: "rgba(0,18,121,0.18)", color: "#535060" }}
                   >
-                    <Heart className={`w-4 h-4 ${isFav ? "fill-primary" : ""}`} />
+                    <Heart className="w-3.5 h-3.5" style={isFav ? { fill: "#FF5100", color: "#FF5100" } : {}} />
                     {isFav ? "Saved as Favourite" : "Save as Favourite"}
                   </button>
                 </div>
               ) : (
-                <div className="bg-warning/10 text-warning p-4 rounded-lg text-center font-bold border border-warning/20">
+                <div className="text-center py-3 rounded-xl border text-[13px] font-semibold" style={{ background: "rgba(217,119,6,0.08)", color: "#D97706", borderColor: "rgba(217,119,6,0.25)" }}>
                   Under Maintenance
                 </div>
               )}
             </div>
           </div>
-
         </div>
       </div>
     </UserLayout>

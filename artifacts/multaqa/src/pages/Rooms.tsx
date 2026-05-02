@@ -12,7 +12,7 @@ function Pill({ label, active, onClick }: { label: string; active: boolean; onCl
   return (
     <button
       onClick={onClick}
-      className="px-3.5 py-1 rounded-full text-sm font-medium border transition-all whitespace-nowrap"
+      className="px-3 py-1 rounded-full text-xs sm:text-sm font-medium border transition-all whitespace-nowrap"
       style={
         active
           ? { background: "#FF5100", color: "white", borderColor: "#FF5100" }
@@ -26,7 +26,6 @@ function Pill({ label, active, onClick }: { label: string; active: boolean; onCl
 
 export default function Rooms() {
   const { rooms, currentLocation, setCurrentLocation } = useAppContext();
-
   const [filterType, setFilterType] = useState<RoomType | "All">("All");
   const [filterAmenity, setFilterAmenity] = useState<AmenityFilter>("All");
 
@@ -41,53 +40,36 @@ export default function Rooms() {
 
   return (
     <UserLayout>
-      {/* Header + Filters — full container width */}
+      {/* Header + Filters */}
       <div className="w-full border-b" style={{ borderColor: "rgba(0,18,121,0.06)" }}>
-        <div className="max-w-6xl mx-auto px-6 md:px-8 pt-10 pb-6">
-          {/* Page header */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-8 pb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold mb-1" style={{ color: "#001279" }}>Browse Rooms</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-1" style={{ color: "#001279" }}>Browse Rooms</h1>
               <p className="text-sm" style={{ color: "#535060" }}>Professional spaces for meetings, calls, and focused team work.</p>
             </div>
-
-            {/* Location switcher */}
-            <div
-              className="inline-flex items-center gap-1 p-1 rounded-xl border bg-white shrink-0"
-              style={{ borderColor: "rgba(0,18,121,0.15)" }}
-            >
+            <div className="inline-flex items-center gap-1 p-1 rounded-xl border bg-white shrink-0" style={{ borderColor: "rgba(0,18,121,0.15)" }}>
               <span className="pl-2 pr-1"><MapPin className="w-4 h-4" style={{ color: "#535060" }} /></span>
               {(["Nablus", "Ramallah"] as const).map(loc => (
-                <button
-                  key={loc}
-                  onClick={() => setCurrentLocation(loc)}
-                  className="px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors"
-                  style={
-                    currentLocation === loc
-                      ? { background: "#001279", color: "white" }
-                      : { color: "#535060" }
-                  }
-                >
-                  {loc}
-                </button>
+                <button key={loc} onClick={() => setCurrentLocation(loc)}
+                  className="px-3 sm:px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors"
+                  style={currentLocation === loc ? { background: "#001279", color: "white" } : { color: "#535060" }}
+                >{loc}</button>
               ))}
             </div>
           </div>
 
-          {/* Filter bar — full width of container */}
-          <div
-            className="w-full bg-white rounded-xl border p-4 space-y-3"
-            style={{ borderColor: "rgba(0,18,121,0.1)" }}
-          >
+          {/* Filter bar — full width */}
+          <div className="w-full bg-white rounded-xl border p-3 sm:p-4 space-y-2.5" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
             <div className="flex items-center flex-wrap gap-2">
-              <SlidersHorizontal className="w-4 h-4 shrink-0" style={{ color: "#535060" }} />
-              <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Type:</span>
+              <SlidersHorizontal className="w-3.5 h-3.5 shrink-0" style={{ color: "#535060" }} />
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Type:</span>
               {(["All", "Private Office", "Meeting Room", "Phone Booth"] as const).map(t => (
                 <Pill key={t} label={t} active={filterType === t} onClick={() => setFilterType(t as RoomType | "All")} />
               ))}
             </div>
             <div className="flex items-center flex-wrap gap-2">
-              <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Amenity:</span>
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Amenity:</span>
               {(["All", "Whiteboard", "TV Screen", "Video Conf"] as const).map(a => (
                 <Pill key={a} label={a} active={filterAmenity === a} onClick={() => setFilterAmenity(a)} />
               ))}
@@ -97,96 +79,86 @@ export default function Rooms() {
       </div>
 
       {/* Cards grid */}
-      <div className="max-w-6xl mx-auto px-6 md:px-8 py-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8">
         {filteredRooms.length === 0 ? (
-          <div className="text-center py-24 bg-white rounded-xl border" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
-            <h3 className="text-xl font-bold mb-2" style={{ color: "#001279" }}>No rooms found</h3>
-            <p className="text-sm mb-6" style={{ color: "#535060" }}>Try adjusting your filters.</p>
+          <div className="text-center py-20 bg-white rounded-xl border" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
+            <h3 className="text-lg font-bold mb-2" style={{ color: "#001279" }}>No rooms found</h3>
+            <p className="text-sm mb-5" style={{ color: "#535060" }}>Try adjusting your filters.</p>
             <Button variant="outline" onClick={() => { setFilterType("All"); setFilterAmenity("All"); }}>
               Clear Filters
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredRooms.map((room, idx) => (
               <motion.div
                 key={room.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.28, delay: idx * 0.04 }}
-                className="group bg-white rounded-2xl border-2 overflow-hidden flex flex-col transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                style={{ borderColor: "rgba(0,18,121,0.09)" }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "#FF5100")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(0,18,121,0.09)")}
+                transition={{ duration: 0.25, delay: idx * 0.03 }}
               >
-                <div className="relative h-48 overflow-hidden shrink-0">
-                  <img
-                    src={room.image}
-                    alt={room.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                  {/* Type badge */}
-                  <div className="absolute top-2.5 left-2.5">
-                    <span className="text-[11px] font-bold px-2.5 py-1 rounded-full text-white" style={{ background: "#FF5100" }}>
-                      {room.type}
-                    </span>
-                  </div>
-                  {/* Status badge */}
-                  <div className="absolute top-2.5 right-2.5">
-                    <span
-                      className="text-[11px] font-bold px-2.5 py-1 rounded-full text-white flex items-center gap-1"
-                      style={{
-                        background: room.status === "Available" ? "#1A7A4A" : room.status === "Reserved" ? "#CC2200" : "#D97706",
-                      }}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/80 shrink-0" />
-                      {room.status}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-4 right-4 flex justify-between items-end">
-                    <h3 className="font-bold text-lg text-white drop-shadow">{room.name}</h3>
-                    <div className="flex items-center gap-1 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full text-white text-xs font-medium border border-white/20">
-                      <Users className="w-3.5 h-3.5" /> {room.capacity}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 flex-1 flex flex-col gap-2.5">
-                  <div className="flex flex-wrap gap-1.5">
-                    {room.equipment.slice(0, 3).map(eq => (
-                      <span key={eq} className="text-[11px] font-medium px-2 py-0.5 rounded-md" style={{ background: "#F5F7FF", color: "#001279" }}>
-                        {eq}
-                      </span>
-                    ))}
-                    {room.equipment.length > 3 && (
-                      <span className="text-[11px] px-2 py-0.5 rounded-md" style={{ background: "#F5F5F5", color: "#535060" }}>
-                        +{room.equipment.length - 3}
-                      </span>
-                    )}
-                    {room.equipment.length === 0 && (
-                      <span className="text-[11px] italic" style={{ color: "#535060" }}>Standard equipment</span>
-                    )}
-                  </div>
-
-                  <div className="mt-auto pt-3 border-t flex items-center justify-between" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
-                    <div>
-                      <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: "#535060" }}>Rate</p>
-                      <p className="font-bold text-lg" style={{ color: "#001279" }}>
-                        {room.priceHour} ILS<span className="text-xs font-normal" style={{ color: "#535060" }}>/hr</span>
-                      </p>
+                <Link href={`/rooms/${room.id}`} className="block h-full">
+                  <div
+                    className="group bg-white rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-md cursor-pointer"
+                    style={{ border: "1px solid rgba(0,18,121,0.09)" }}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = "#FF5100")}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(0,18,121,0.09)")}
+                  >
+                    <div className="relative h-44 sm:h-48 overflow-hidden shrink-0">
+                      <img src={room.image} alt={room.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                      <div className="absolute top-2 left-2">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: "#FF5100" }}>
+                          {room.type}
+                        </span>
+                      </div>
+                      <div className="absolute top-2 right-2">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white flex items-center gap-1"
+                          style={{ background: room.status === "Available" ? "#1A7A4A" : room.status === "Reserved" ? "#CC2200" : "#D97706" }}>
+                          <span className="w-1.5 h-1.5 rounded-full bg-white/80 shrink-0" />{room.status}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                        <h3 className="font-bold text-base text-white drop-shadow leading-tight">{room.name}</h3>
+                        <div className="flex items-center gap-1 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full text-white text-[10px] font-medium border border-white/20 shrink-0">
+                          <Users className="w-3 h-3" /> {room.capacity}
+                        </div>
+                      </div>
                     </div>
 
-                    <Link href={`/rooms/${room.id}`}>
-                      <span
-                        className="text-sm font-semibold flex items-center gap-0.5 transition-opacity hover:opacity-75"
-                        style={{ color: room.status === "Available" ? "#FF5100" : "#535060" }}
-                      >
-                        View Details →
-                      </span>
-                    </Link>
+                    <div className="p-3.5 flex-1 flex flex-col gap-2">
+                      <div className="flex flex-wrap gap-1">
+                        {room.equipment.slice(0, 3).map(eq => (
+                          <span key={eq} className="text-[10px] font-medium px-1.5 py-0.5 rounded" style={{ background: "#F5F7FF", color: "#001279" }}>
+                            {eq}
+                          </span>
+                        ))}
+                        {room.equipment.length > 3 && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "#F5F5F5", color: "#535060" }}>
+                            +{room.equipment.length - 3}
+                          </span>
+                        )}
+                        {room.equipment.length === 0 && (
+                          <span className="text-[10px] italic" style={{ color: "#535060" }}>Standard equipment</span>
+                        )}
+                      </div>
+
+                      <div className="mt-auto pt-2.5 border-t flex items-center justify-between" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+                        <div>
+                          <p className="text-[9px] font-medium uppercase tracking-wide" style={{ color: "#535060" }}>Rate</p>
+                          <p className="font-bold text-sm" style={{ color: "#001279" }}>
+                            {room.priceHour} ILS<span className="text-[10px] font-normal" style={{ color: "#535060" }}>/hr</span>
+                          </p>
+                        </div>
+                        <span className="font-semibold" style={{ fontSize: "12px", color: room.status === "Available" ? "#FF5100" : "#535060" }}>
+                          View Details →
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
