@@ -29,14 +29,14 @@ export function UserLayout({ children }: { children: ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="pt-16 pb-8 border-t" style={{ backgroundColor: "var(--navy-tint)", borderTopColor: "rgba(0,18,121,0.1)" }}>
-        <div className="max-w-5xl mx-auto px-6 md:px-8">
+      <footer className="pt-14 pb-8" style={{ background: "#0D1117" }}>
+        <div className="max-w-6xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
 
             {/* Brand */}
             <div className="md:col-span-1">
-              <img src="/logo.png" alt="Multaqa" className="h-10 w-auto mb-4" />
-              <p className="text-sm leading-relaxed mb-5" style={{ color: "#535060" }}>
+              <img src="/logo.png" alt="Multaqa" className="h-10 w-auto mb-4 brightness-0 invert" />
+              <p className="text-sm leading-relaxed mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>
                 Palestine's first dedicated coworking booking platform. Your seat. Secured.
               </p>
               <div className="flex gap-3">
@@ -49,17 +49,17 @@ export function UserLayout({ children }: { children: ReactNode }) {
                     key={label}
                     href="#"
                     aria-label={label}
-                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors border"
-                    style={{ color: "#001279", borderColor: "rgba(0,18,121,0.2)", background: "rgba(255,255,255,0.6)" }}
+                    className="w-8 h-8 rounded-full flex items-center justify-center transition-all border"
+                    style={{ color: "rgba(255,255,255,0.5)", borderColor: "rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.06)" }}
                     onMouseEnter={e => {
-                      (e.currentTarget as HTMLAnchorElement).style.background = "#001279";
+                      (e.currentTarget as HTMLAnchorElement).style.background = "#FF5100";
                       (e.currentTarget as HTMLAnchorElement).style.color = "white";
-                      (e.currentTarget as HTMLAnchorElement).style.borderColor = "#001279";
+                      (e.currentTarget as HTMLAnchorElement).style.borderColor = "#FF5100";
                     }}
                     onMouseLeave={e => {
-                      (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.6)";
-                      (e.currentTarget as HTMLAnchorElement).style.color = "#001279";
-                      (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(0,18,121,0.2)";
+                      (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.06)";
+                      (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.5)";
+                      (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.12)";
                     }}
                   >
                     {icon}
@@ -70,13 +70,13 @@ export function UserLayout({ children }: { children: ReactNode }) {
 
             {/* Spaces */}
             <div>
-              <h4 className="font-bold text-sm tracking-wide uppercase mb-4" style={{ color: "#001279", opacity: 0.5 }}>Spaces</h4>
+              <h4 className="font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>Spaces</h4>
               <ul className="space-y-3">
                 {[["Browse Desks", "/desks"], ["Browse Rooms", "/rooms"], ["Nablus Location", "/desks"], ["Ramallah Location", "/rooms"]].map(([label, href]) => (
                   <li key={label}>
-                    <Link href={href} className="text-sm transition-colors" style={{ color: "#535060" }}
+                    <Link href={href} className="text-sm transition-colors" style={{ color: "rgba(255,255,255,0.6)" }}
                       onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
-                      onMouseLeave={e => (e.currentTarget.style.color = "#535060")}
+                      onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
                     >{label}</Link>
                   </li>
                 ))}
@@ -85,13 +85,13 @@ export function UserLayout({ children }: { children: ReactNode }) {
 
             {/* Platform */}
             <div>
-              <h4 className="font-bold text-sm tracking-wide uppercase mb-4" style={{ color: "#001279", opacity: 0.5 }}>Platform</h4>
+              <h4 className="font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>Platform</h4>
               <ul className="space-y-3">
                 {[["How it Works", "/onboarding"], ["My Reservations", "/my-reservations"], ["Community", "/community"], ["Support", "/support"]].map(([label, href]) => (
                   <li key={label}>
-                    <Link href={href} className="text-sm transition-colors" style={{ color: "#535060" }}
+                    <Link href={href} className="text-sm transition-colors" style={{ color: "rgba(255,255,255,0.6)" }}
                       onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
-                      onMouseLeave={e => (e.currentTarget.style.color = "#535060")}
+                      onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
                     >{label}</Link>
                   </li>
                 ))}
@@ -100,8 +100,8 @@ export function UserLayout({ children }: { children: ReactNode }) {
 
             {/* Contact */}
             <div>
-              <h4 className="font-bold text-sm tracking-wide uppercase mb-4" style={{ color: "#001279", opacity: 0.5 }}>Contact</h4>
-              <ul className="space-y-3 text-sm" style={{ color: "#535060" }}>
+              <h4 className="font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>Contact</h4>
+              <ul className="space-y-3 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
                 <li>support@multaqa.ps</li>
                 <li>+970 599 000 000</li>
                 <li>Sun–Thu, 9 AM – 6 PM</li>
@@ -119,15 +119,15 @@ export function UserLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
 
-          <div className="border-t pt-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
-            <p className="text-sm" style={{ color: "#535060", opacity: 0.7 }}>
+          <div className="border-t pt-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
               © {new Date().getFullYear()} Multaqa — Coworking &amp; Booking. All rights reserved.
             </p>
-            <div className="flex gap-6 text-xs" style={{ color: "#535060" }}>
+            <div className="flex gap-6 text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
               {["Privacy Policy", "Terms of Service", "Sitemap"].map(t => (
-                <a key={t} href="#" className="transition-colors hover:opacity-100" style={{ opacity: 0.7 }}
+                <a key={t} href="#" className="transition-colors"
                   onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "#535060")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.3)")}
                 >{t}</a>
               ))}
             </div>

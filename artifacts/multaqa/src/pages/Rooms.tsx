@@ -1,149 +1,181 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
 import { useAppContext, RoomType } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Users } from "lucide-react";
+import { MapPin, Users, SlidersHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
+
+type AmenityFilter = "All" | "Whiteboard" | "TV Screen" | "Video Conf";
+
+function Pill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="px-3.5 py-1 rounded-full text-sm font-medium border transition-all whitespace-nowrap"
+      style={
+        active
+          ? { background: "#FF5100", color: "white", borderColor: "#FF5100" }
+          : { background: "white", color: "#535060", borderColor: "rgba(0,0,0,0.18)" }
+      }
+    >
+      {label}
+    </button>
+  );
+}
 
 export default function Rooms() {
   const { rooms, currentLocation, setCurrentLocation } = useAppContext();
-  
+
   const [filterType, setFilterType] = useState<RoomType | "All">("All");
-  
-  const filteredRooms = rooms.filter(r => 
+  const [filterAmenity, setFilterAmenity] = useState<AmenityFilter>("All");
+
+  const filteredRooms = rooms.filter(r =>
     r.location === currentLocation &&
-    (filterType === "All" || r.type === filterType)
+    (filterType === "All" || r.type === filterType) &&
+    (filterAmenity === "All" ||
+      (filterAmenity === "Whiteboard" && r.equipment.some(e => e.toLowerCase().includes("whiteboard"))) ||
+      (filterAmenity === "TV Screen" && r.equipment.some(e => e.toLowerCase().includes("tv") || e.toLowerCase().includes("screen"))) ||
+      (filterAmenity === "Video Conf" && r.equipment.some(e => e.toLowerCase().includes("video"))))
   );
 
   return (
     <UserLayout>
-      <div className="bg-secondary text-white border-b border-border">
-        <div className="container mx-auto px-6 py-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-3">Browse Rooms</h1>
-              <p className="text-white/80 max-w-lg">Professional spaces for meetings, calls, and focused team work in {currentLocation}.</p>
-            </div>
-            
-            <div className="bg-white/10 p-1 rounded-lg border border-white/20 inline-flex">
-              <button 
-                onClick={() => setCurrentLocation("Nablus")}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${currentLocation === "Nablus" ? "bg-white text-secondary shadow-sm" : "text-white/70 hover:text-white"}`}
-              >
-                Nablus
-              </button>
-              <button 
-                onClick={() => setCurrentLocation("Ramallah")}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${currentLocation === "Ramallah" ? "bg-white text-secondary shadow-sm" : "text-white/70 hover:text-white"}`}
-              >
-                Ramallah
-              </button>
-            </div>
+      <div className="max-w-6xl mx-auto px-6 md:px-8 pt-10 pb-4">
+        {/* Page header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold mb-1" style={{ color: "#001279" }}>Browse Rooms</h1>
+            <p className="text-sm" style={{ color: "#535060" }}>Professional spaces for meetings, calls, and focused team work.</p>
           </div>
-          
-          {/* Filters */}
-          <div className="flex flex-wrap gap-4 items-center">
-            <span className="text-sm font-medium text-white/80 flex items-center gap-2">
-              <MapPin className="w-4 h-4" /> Filters:
-            </span>
-            
-            <Select value={filterType} onValueChange={(val) => setFilterType(val as RoomType | "All")}>
-              <SelectTrigger className="w-[200px] bg-white/10 border-white/20 text-white">
-                <SelectValue placeholder="Room Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All Room Types</SelectItem>
-                <SelectItem value="Private Office">Private Office</SelectItem>
-                <SelectItem value="Meeting Room">Meeting Room</SelectItem>
-                <SelectItem value="Phone Booth">Phone Booth</SelectItem>
-              </SelectContent>
-            </Select>
+
+          {/* Location switcher */}
+          <div
+            className="inline-flex items-center gap-1 p-1 rounded-xl border bg-white"
+            style={{ borderColor: "rgba(0,18,121,0.15)" }}
+          >
+            <span className="pl-2 pr-1"><MapPin className="w-4 h-4" style={{ color: "#535060" }} /></span>
+            {(["Nablus", "Ramallah"] as const).map(loc => (
+              <button
+                key={loc}
+                onClick={() => setCurrentLocation(loc)}
+                className="px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors"
+                style={
+                  currentLocation === loc
+                    ? { background: "#001279", color: "white" }
+                    : { color: "#535060" }
+                }
+              >
+                {loc}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Filter bar */}
+        <div
+          className="bg-white rounded-xl border p-4 space-y-3 mb-8"
+          style={{ borderColor: "rgba(0,18,121,0.1)" }}
+        >
+          <div className="flex items-center flex-wrap gap-2">
+            <SlidersHorizontal className="w-4 h-4 shrink-0" style={{ color: "#535060" }} />
+            <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Type:</span>
+            {(["All", "Private Office", "Meeting Room", "Phone Booth"] as const).map(t => (
+              <Pill key={t} label={t} active={filterType === t} onClick={() => setFilterType(t as RoomType | "All")} />
+            ))}
+          </div>
+          <div className="flex items-center flex-wrap gap-2">
+            <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Amenity:</span>
+            {(["All", "Whiteboard", "TV Screen", "Video Conf"] as const).map(a => (
+              <Pill key={a} label={a} active={filterAmenity === a} onClick={() => setFilterAmenity(a)} />
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-12 bg-background flex-1">
+      {/* Cards grid */}
+      <div className="max-w-6xl mx-auto px-6 md:px-8 pb-16">
         {filteredRooms.length === 0 ? (
-          <div className="text-center py-24 bg-muted rounded-xl border border-border">
-            <h3 className="text-xl font-bold text-secondary mb-2">No rooms found</h3>
-            <p className="text-muted-foreground mb-6">Try adjusting your filters to see more options.</p>
-            <Button variant="outline" onClick={() => setFilterType("All")}>
+          <div className="text-center py-24 bg-white rounded-xl border" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
+            <h3 className="text-xl font-bold mb-2" style={{ color: "#001279" }}>No rooms found</h3>
+            <p className="text-sm mb-6" style={{ color: "#535060" }}>Try adjusting your filters to see more options.</p>
+            <Button variant="outline" onClick={() => { setFilterType("All"); setFilterAmenity("All"); }}>
               Clear Filters
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredRooms.map((room, idx) => (
-              <motion.div 
+              <motion.div
                 key={room.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: idx * 0.05 }}
-                className="group bg-white rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-lg transition-all hover:border-primary/30 flex flex-col"
+                transition={{ duration: 0.28, delay: idx * 0.04 }}
+                className="group bg-white rounded-2xl border overflow-hidden flex flex-col transition-all hover:shadow-lg hover:-translate-y-0.5"
+                style={{ borderColor: "rgba(0,18,121,0.09)" }}
               >
-                <div className="relative h-56 overflow-hidden bg-muted">
-                  <img 
-                    src={room.image} 
-                    alt={room.name} 
+                <div className="relative h-48 overflow-hidden shrink-0">
+                  <img
+                    src={room.image}
+                    alt={room.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-primary text-white hover:bg-primary border-none">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                  <div className="absolute top-2.5 left-2.5">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: "#FF5100" }}>
                       {room.type}
-                    </Badge>
+                    </span>
                   </div>
-                  <div className="absolute top-4 right-4">
-                    <Badge className={`font-semibold ${
-                      room.status === "Available" ? "bg-success text-white hover:bg-success" : 
-                      room.status === "Reserved" ? "bg-destructive text-white hover:bg-destructive" :
-                      "bg-warning text-white hover:bg-warning"
-                    }`}>
-                      {room.status}
-                    </Badge>
+                  <div className="absolute top-2.5 right-2.5">
+                    <span
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+                      style={{
+                        background: room.status === "Available" ? "#1A7A4A" : room.status === "Reserved" ? "#CC1A00" : "#D97706",
+                      }}
+                    >{room.status}</span>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                    <h3 className="font-bold text-2xl text-white drop-shadow-md">{room.name}</h3>
-                    <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full text-white text-sm font-medium border border-white/20">
-                      <Users className="w-4 h-4" /> Up to {room.capacity}
+                  <div className="absolute bottom-3 left-4 right-4 flex justify-between items-end">
+                    <h3 className="font-bold text-lg text-white drop-shadow">{room.name}</h3>
+                    <div className="flex items-center gap-1 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full text-white text-xs font-medium border border-white/20">
+                      <Users className="w-3.5 h-3.5" /> {room.capacity}
                     </div>
                   </div>
                 </div>
-                
-                <div className="p-6 flex-1 flex flex-col">
-                  
-                  <div className="flex flex-wrap gap-2 mb-6">
+
+                <div className="p-4 flex-1 flex flex-col gap-3">
+                  <div className="flex flex-wrap gap-1.5">
                     {room.equipment.slice(0, 3).map(eq => (
-                      <span key={eq} className="text-xs font-medium text-secondary bg-[#E8EBFF] px-2.5 py-1 rounded-md border border-[#001279]/10">
+                      <span key={eq} className="text-[11px] font-medium px-2 py-0.5 rounded-md" style={{ background: "#F5F7FF", color: "#001279" }}>
                         {eq}
                       </span>
                     ))}
                     {room.equipment.length > 3 && (
-                      <span className="text-xs font-medium text-muted-foreground bg-muted px-2.5 py-1 rounded-md">
-                        +{room.equipment.length - 3} more
+                      <span className="text-[11px] px-2 py-0.5 rounded-md" style={{ background: "#F5F5F5", color: "#535060" }}>
+                        +{room.equipment.length - 3}
                       </span>
                     )}
                     {room.equipment.length === 0 && (
-                      <span className="text-xs text-muted-foreground italic">Standard equipment</span>
+                      <span className="text-[11px] italic" style={{ color: "#535060" }}>Standard equipment</span>
                     )}
                   </div>
-                  
-                  <div className="mt-auto flex items-center justify-between pt-4 border-t border-border">
-                    <div className="flex flex-col">
-                      <span className="text-xs text-muted-foreground uppercase font-medium tracking-wide">Rate</span>
-                      <span className="font-bold text-secondary text-xl">{room.priceHour} ILS <span className="text-sm font-normal text-muted-foreground">/hr</span></span>
+
+                  <div className="mt-auto pt-3 border-t flex items-center justify-between" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+                    <div>
+                      <p className="text-[10px] font-medium uppercase tracking-wide" style={{ color: "#535060" }}>Rate</p>
+                      <p className="font-bold text-lg" style={{ color: "#001279" }}>
+                        {room.priceHour} ILS <span className="text-xs font-normal" style={{ color: "#535060" }}>/hr</span>
+                      </p>
                     </div>
-                    
+
                     <Link href={`/rooms/${room.id}`}>
-                      <Button 
-                        variant={room.status === "Available" ? "default" : "outline"} 
-                        className={room.status === "Available" ? "bg-primary hover:bg-primary/90 text-white" : "border-border text-muted-foreground hover:bg-muted"}
+                      <button
+                        className="text-sm font-semibold px-4 py-1.5 rounded-lg text-white transition-colors"
+                        style={{ background: room.status === "Available" ? "#FF5100" : "#535060" }}
+                        onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+                        onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
                       >
                         {room.status === "Available" ? "View Details" : "View"}
-                      </Button>
+                      </button>
                     </Link>
                   </div>
                 </div>

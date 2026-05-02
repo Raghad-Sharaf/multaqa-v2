@@ -143,7 +143,7 @@ export default function Home() {
               </div>
 
               {/* Description */}
-              <p className="text-base leading-relaxed max-w-sm" style={{ color: "#535060" }}>
+              <p className="leading-relaxed max-w-md" style={{ color: "#535060", fontSize: "18px" }}>
                 Browse our desks and rooms, check live availability, and lock in your
                 spot before you leave home. No more walk-in surprises.
               </p>
@@ -230,7 +230,7 @@ export default function Home() {
                   src="/desk-1.png"
                   alt="Multaqa coworking space"
                   className="rounded-[1.75rem] object-cover block"
-                  style={{ height: "400px", width: "480px" }}
+                  style={{ height: "340px", width: "560px" }}
                 />
               </div>
             </motion.div>
@@ -335,11 +335,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FF5100" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-8" style={{ color: "#001279" }}>
                 Why Multaqa
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-8" style={{ color: "#001279" }}>
-                Everything you need to do your best work.
               </h2>
               <div className="space-y-6">
                 {[
@@ -383,31 +380,14 @@ export default function Home() {
       <section
         className="py-24 relative overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, #0D1117 0%, #001060 55%, #0D0A2E 100%)",
+          background: "linear-gradient(135deg, oklch(94% .05 268) 0%, oklch(99% .01 268) 50%, oklch(96% .04 50) 100%)",
         }}
       >
-        {/* Orange radial glow left */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at 15% 60%, rgba(255,81,0,0.22) 0%, transparent 55%), radial-gradient(ellipse at 85% 30%, rgba(0,29,153,0.5) 0%, transparent 50%)",
-          }}
-        />
-        {/* Subtle dot grid */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{
-            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
-
         <div className="max-w-6xl mx-auto px-6 md:px-8 text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#001279" }}>
             Ready to book your space?
           </h2>
-          <p className="mb-10 max-w-xl mx-auto text-lg" style={{ color: "rgba(255,255,255,0.65)" }}>
+          <p className="mb-10 max-w-xl mx-auto text-lg" style={{ color: "#535060" }}>
             Join hundreds of professionals working smarter across Nablus and Ramallah.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

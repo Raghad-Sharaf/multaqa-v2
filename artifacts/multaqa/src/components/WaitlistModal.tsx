@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAppContext } from "@/context/AppContext";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
@@ -28,123 +27,154 @@ export function WaitlistModal({ itemId, itemName, itemType, date, timeSlot, onCl
   );
 
   const timeSlots = [
-    "8:00–12:00", "9:00–13:00", "10:00–14:00", "13:00–17:00", "14:00–18:00", "9:00–17:00",
+    "8:00–12:00", "9:00–13:00", "10:00–14:00",
+    "13:00–17:00", "14:00–18:00", "9:00–17:00",
   ];
 
   const handleJoin = () => {
     if (!email || alreadyOnList) return;
-    const entry = {
-      id: `WL-${String(waitlist.length + 1).padStart(3, "0")}`,
-      itemId,
-      itemType,
+    setWaitlist(prev => [...prev, {
+      id: `WL-${String(prev.length + 1).padStart(3, "0")}`,
+      itemId, itemType,
       userEmail: email,
       date: selectedDate,
       timeSlot: selectedTime,
       createdAt: new Date().toISOString(),
-    };
-    setWaitlist(prev => [...prev, entry]);
+    }]);
     setSubmitted(true);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(0,18,121,0.55)", backdropFilter: "blur(5px)" }}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,18,121,0.5)", backdropFilter: "blur(4px)" }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 16 }}
+        initial={{ opacity: 0, scale: 0.96, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.28 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+        exit={{ opacity: 0, scale: 0.96 }}
+        transition={{ duration: 0.22 }}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+        style={{ maxHeight: "88vh", display: "flex", flexDirection: "column" }}
       >
         {!submitted ? (
           <>
-            <div className="p-6 border-b border-border flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <BellRing className="w-5 h-5" />
+            {/* Header */}
+            <div className="px-5 py-4 border-b flex items-center justify-between shrink-0" style={{ borderColor: "rgba(0,18,121,0.08)" }}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "#FFF0E8", color: "#FF5100" }}>
+                  <BellRing className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="font-bold text-secondary text-lg">Join the Waitlist</h2>
-                  <p className="text-muted-foreground text-sm">{itemName}</p>
+                  <h2 className="font-bold text-base" style={{ color: "#001279" }}>Join Waitlist</h2>
+                  <p className="text-xs" style={{ color: "#535060" }}>{itemName}</p>
                 </div>
               </div>
-              <button onClick={onClose} className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:bg-muted/80">
-                <X className="w-4 h-4" />
+              <button
+                onClick={onClose}
+                className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+                style={{ background: "#F5F5F5", color: "#535060" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "#E8EBFF")}
+                onMouseLeave={e => (e.currentTarget.style.background = "#F5F5F5")}
+              >
+                <X className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            <div className="p-6 space-y-5">
-              <div className="bg-muted/50 p-4 rounded-xl border border-border text-sm text-muted-foreground flex gap-3">
-                <Clock className="w-4 h-4 shrink-0 mt-0.5 text-warning" />
-                <span>This {itemType === "desk" ? "desk" : "room"} is currently reserved. If a cancellation happens, you'll get a booking link by email — first-come, first-served.</span>
+            {/* Scrollable body */}
+            <div className="px-5 py-4 space-y-4 overflow-y-auto flex-1">
+              {/* Info */}
+              <div className="rounded-xl p-3 flex gap-2.5 text-xs" style={{ background: "#FFF8E8", color: "#535060" }}>
+                <Clock className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: "#D97706" }} />
+                <span>This {itemType} is reserved. We'll email you if a spot opens — first-come, first-served.</span>
               </div>
 
-              <div className="space-y-1.5">
-                <Label>Email Address</Label>
+              {/* Email */}
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold" style={{ color: "#001279" }}>Email Address</Label>
                 <Input
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="h-11"
+                  className="h-9 text-sm"
                 />
                 {alreadyOnList && (
-                  <p className="text-xs text-warning font-medium">You're already on the waitlist for this date.</p>
+                  <p className="text-xs font-medium" style={{ color: "#D97706" }}>Already on waitlist for this date.</p>
                 )}
               </div>
 
-              <div className="space-y-1.5">
-                <Label>Preferred Date</Label>
+              {/* Date */}
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold" style={{ color: "#001279" }}>Preferred Date</Label>
                 <Input
                   type="date"
                   value={selectedDate}
                   onChange={e => setSelectedDate(e.target.value)}
                   min={format(new Date(), "yyyy-MM-dd")}
-                  className="h-11"
+                  className="h-9 text-sm"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label>Preferred Time</Label>
-                <div className="grid grid-cols-2 gap-2">
+              {/* Time slots — 3 column */}
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold" style={{ color: "#001279" }}>Preferred Time</Label>
+                <div className="grid grid-cols-3 gap-1.5">
                   {timeSlots.map(slot => (
                     <button
                       key={slot}
                       onClick={() => setSelectedTime(slot)}
-                      className={`py-2 px-3 rounded-lg border text-sm font-medium transition-all text-center ${selectedTime === slot ? "bg-primary text-white border-primary" : "bg-white text-secondary border-border hover:border-primary/40"}`}
+                      className="py-1.5 px-1 rounded-lg border text-xs font-medium transition-all text-center"
+                      style={
+                        selectedTime === slot
+                          ? { background: "#FF5100", color: "white", borderColor: "#FF5100" }
+                          : { background: "white", color: "#535060", borderColor: "rgba(0,0,0,0.15)" }
+                      }
                     >
                       {slot}
                     </button>
                   ))}
                 </div>
               </div>
+            </div>
 
-              <Button
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold"
+            {/* Footer CTA */}
+            <div className="px-5 py-4 border-t shrink-0" style={{ borderColor: "rgba(0,18,121,0.08)" }}>
+              <button
+                className="w-full h-10 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+                style={{ background: "#FF5100" }}
                 disabled={!email || alreadyOnList}
                 onClick={handleJoin}
+                onMouseEnter={e => { if (!(!email || alreadyOnList)) e.currentTarget.style.background = "#e04800"; }}
+                onMouseLeave={e => (e.currentTarget.style.background = "#FF5100")}
               >
-                <BellRing className="w-4 h-4 mr-2" /> Join Waitlist
-              </Button>
+                <BellRing className="w-4 h-4" /> Join Waitlist
+              </button>
             </div>
           </>
         ) : (
-          <div className="p-10 text-center">
-            <div className="w-16 h-16 bg-success rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg shadow-success/20">
-              <CheckCircle2 className="w-8 h-8 text-white" />
+          <div className="p-8 text-center">
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ background: "#E6F5EC" }}
+            >
+              <CheckCircle2 className="w-7 h-7" style={{ color: "#1A7A4A" }} />
             </div>
-            <h2 className="text-xl font-bold text-secondary mb-2">You're on the list!</h2>
-            <p className="text-muted-foreground text-sm mb-1">
-              We'll email <strong className="text-secondary">{email}</strong> the moment a spot opens for
+            <h2 className="text-lg font-bold mb-1" style={{ color: "#001279" }}>You're on the list!</h2>
+            <p className="text-sm mb-1" style={{ color: "#535060" }}>
+              We'll email <strong style={{ color: "#001279" }}>{email}</strong> when a spot opens for
             </p>
-            <p className="text-secondary font-semibold text-sm mb-6">
+            <p className="text-sm font-semibold mb-5" style={{ color: "#001279" }}>
               {itemName} — {format(new Date(selectedDate), "EEE, MMM d")} · {selectedTime}
             </p>
-            <Button onClick={onClose} className="bg-primary hover:bg-primary/90 text-white">
+            <button
+              className="px-6 py-2 rounded-xl text-white text-sm font-semibold"
+              style={{ background: "#FF5100" }}
+              onClick={onClose}
+            >
               Done
-            </Button>
+            </button>
           </div>
         )}
       </motion.div>
