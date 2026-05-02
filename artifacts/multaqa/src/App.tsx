@@ -17,6 +17,9 @@ import BookingConfirmation from "@/pages/BookingConfirmation";
 import MyReservations from "@/pages/MyReservations";
 import ModifyBooking from "@/pages/ModifyBooking";
 import Community from "@/pages/Community";
+import Support from "@/pages/Support";
+import Analytics from "@/pages/Analytics";
+import Onboarding from "@/pages/Onboarding";
 
 import AdminOverview from "@/pages/AdminOverview";
 import AdminBookings from "@/pages/AdminBookings";
@@ -44,13 +47,16 @@ function Router() {
       <Route path="/my-reservations" component={MyReservations} />
       <Route path="/my-reservations/modify/:id" component={ModifyBooking} />
       <Route path="/community" component={Community} />
-      
+      <Route path="/support" component={Support} />
+      <Route path="/onboarding" component={Onboarding} />
+
       <Route path="/admin" component={AdminOverview} />
       <Route path="/admin/bookings" component={AdminBookings} />
       <Route path="/admin/unpaid" component={AdminUnpaidCash} />
       <Route path="/admin/seats" component={AdminSeats} />
+      <Route path="/admin/analytics" component={Analytics} />
       <Route path="/admin/create-booking" component={AdminCreateBooking} />
-      
+
       <Route component={NotFound} />
     </Switch>
   );

@@ -10,11 +10,12 @@ export type User = {
 };
 
 export type Location = "Nablus" | "Ramallah";
-
 export type DeskType = "Flex Desk" | "Hot Desk" | "Dedicated Desk";
 export type Zone = "Deep Work" | "Calls Allowed";
 export type Status = "Available" | "Reserved" | "Maintenance";
 export type WiFiSpeed = "Fast" | "Good" | "Basic";
+export type BookingMode = "single" | "multi-day" | "recurring" | "team";
+export type RecurringPattern = "daily" | "weekly";
 
 export type Desk = {
   id: string;
@@ -48,20 +49,48 @@ export type Room = {
 
 export type Booking = {
   id: string;
-  itemId: string; // Desk ID or Room ID
+  itemId: string;
   itemType: "desk" | "room";
   location: Location;
   userId?: number;
   guestEmail?: string;
   userName?: string;
-  date: string; // YYYY-MM-DD
-  time: string; // "9:00-13:00"
+  date: string;
+  time: string;
   duration: "1 Hour" | "Half Day" | "Full Day";
   totalPrice: number;
   paymentMethod: "Cash";
   paymentStatus: "Paid" | "Unpaid";
   bookingStatus: "Upcoming" | "Completed" | "Cancelled";
   paymentDeadline?: string;
+  bookingMode?: BookingMode;
+  multiDays?: string[];
+  recurringPattern?: RecurringPattern;
+  recurringEndDate?: string;
+  teamMembers?: string[];
+  teamDeskIds?: string[];
+};
+
+export type WaitlistEntry = {
+  id: string;
+  itemId: string;
+  itemType: "desk" | "room";
+  userEmail: string;
+  date: string;
+  timeSlot: string;
+  createdAt: string;
+  notified?: boolean;
+};
+
+export type SupportTicket = {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  category: "booking" | "technical" | "complaint" | "general";
+  status: "open" | "in-progress" | "resolved";
+  createdAt: string;
 };
 
 export type Member = {
@@ -78,19 +107,26 @@ type AppContextType = {
   currentLocation: Location;
   setCurrentLocation: (loc: Location) => void;
   desks: Desk[];
-  setDesks: (desks: Desk[]) => void;
+  setDesks: (desks: Desk[] | ((prev: Desk[]) => Desk[])) => void;
   rooms: Room[];
-  setRooms: (rooms: Room[]) => void;
+  setRooms: (rooms: Room[] | ((prev: Room[]) => Room[])) => void;
   bookings: Booking[];
-  setBookings: (bookings: Booking[]) => void;
+  setBookings: (bookings: Booking[] | ((prev: Booking[]) => Booking[])) => void;
   members: Member[];
   setMembers: (members: Member[]) => void;
   bookingDraft: Partial<Booking> | null;
   setBookingDraft: (draft: Partial<Booking> | null) => void;
+  favorites: string[];
+  toggleFavorite: (id: string) => void;
+  waitlist: WaitlistEntry[];
+  setWaitlist: (wl: WaitlistEntry[] | ((prev: WaitlistEntry[]) => WaitlistEntry[])) => void;
+  supportTickets: SupportTicket[];
+  addSupportTicket: (ticket: Omit<SupportTicket, "id" | "status" | "createdAt">) => void;
+  hasSeenOnboarding: boolean;
+  setHasSeenOnboarding: (v: boolean) => void;
 };
 
 const initialDesks: Desk[] = [
-  // Nablus
   { id: "A-1", name: "Desk A-1", type: "Flex Desk", zone: "Deep Work", status: "Available", priceHour: 15, priceHalfDay: 50, priceFullDay: 85, amenities: ["Power outlets", "Window seat"], wifi: "Fast", location: "Nablus", image: "/desk-1.png" },
   { id: "A-2", name: "Desk A-2", type: "Hot Desk", zone: "Calls Allowed", status: "Available", priceHour: 15, amenities: ["Power outlets", "External monitor"], wifi: "Good", location: "Nablus", image: "/desk-3.png" },
   { id: "A-3", name: "Desk A-3", type: "Dedicated Desk", zone: "Deep Work", status: "Reserved", priceHour: 15, amenities: ["Power outlets", "Window seat", "External monitor", "Standing desk option"], wifi: "Fast", location: "Nablus", image: "/desk-2.png" },
@@ -99,7 +135,6 @@ const initialDesks: Desk[] = [
   { id: "A-6", name: "Desk A-6", type: "Dedicated Desk", zone: "Calls Allowed", status: "Reserved", priceHour: 15, amenities: ["Power outlets", "External monitor"], wifi: "Good", location: "Nablus", image: "/desk-3.png" },
   { id: "A-7", name: "Desk A-7", type: "Flex Desk", zone: "Deep Work", status: "Available", priceHour: 15, amenities: ["Power outlets", "Standing desk option"], wifi: "Basic", location: "Nablus", image: "/desk-1.png" },
   { id: "A-8", name: "Desk A-8", type: "Hot Desk", zone: "Calls Allowed", status: "Available", priceHour: 15, amenities: ["Power outlets", "Window seat"], wifi: "Good", location: "Nablus", image: "/desk-2.png" },
-  // Ramallah
   { id: "B-1", name: "Desk B-1", type: "Flex Desk", zone: "Deep Work", status: "Available", priceHour: 15, amenities: [], wifi: "Fast", location: "Ramallah", image: "/desk-1.png" },
   { id: "B-2", name: "Desk B-2", type: "Dedicated Desk", zone: "Deep Work", status: "Reserved", priceHour: 15, amenities: [], wifi: "Fast", location: "Ramallah", image: "/desk-2.png" },
   { id: "B-3", name: "Desk B-3", type: "Hot Desk", zone: "Calls Allowed", status: "Available", priceHour: 15, amenities: [], wifi: "Good", location: "Ramallah", image: "/desk-3.png" },
@@ -117,14 +152,15 @@ const initialRooms: Room[] = [
 ];
 
 const initialBookings: Booking[] = [
-  { id: "MQR-20491", itemId: "A-1", itemType: "desk", location: "Nablus", userId: 1, date: "2025-05-12", time: "9:00–13:00", duration: "Half Day", totalPrice: 50, paymentMethod: "Cash", paymentStatus: "Unpaid", bookingStatus: "Upcoming", paymentDeadline: "2025-05-15" },
-  { id: "MQR-20385", itemId: "R-2", itemType: "room", location: "Nablus", userId: 1, date: "2025-04-28", time: "14:00–18:00", duration: "Half Day", totalPrice: 140, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed" },
-  { id: "MQR-20201", itemId: "A-5", itemType: "desk", location: "Nablus", userId: 1, date: "2025-04-15", time: "10:00–12:00", duration: "1 Hour", totalPrice: 30, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed" },
-  // Admin bookings
-  { id: "MQR-10001", itemId: "A-2", itemType: "desk", location: "Nablus", userName: "Tala", date: "2025-05-01", time: "9:00-17:00", duration: "Full Day", totalPrice: 85, paymentMethod: "Cash", paymentStatus: "Unpaid", bookingStatus: "Upcoming", paymentDeadline: "2025-05-04" },
-  { id: "MQR-10002", itemId: "R-1", itemType: "room", location: "Nablus", userName: "Omar", date: "2025-05-02", time: "10:00-11:00", duration: "1 Hour", totalPrice: 40, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Upcoming" },
-  { id: "MQR-10003", itemId: "B-1", itemType: "desk", location: "Ramallah", userName: "Rami", date: "2025-05-03", time: "9:00-13:00", duration: "Half Day", totalPrice: 50, paymentMethod: "Cash", paymentStatus: "Unpaid", bookingStatus: "Upcoming", paymentDeadline: "2025-05-06" },
-  { id: "MQR-10004", itemId: "A-4", itemType: "desk", location: "Nablus", userName: "Sara", date: "2025-04-30", time: "12:00-16:00", duration: "Half Day", totalPrice: 50, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed" },
+  { id: "MQR-20491", itemId: "A-1", itemType: "desk", location: "Nablus", userId: 1, date: "2026-05-12", time: "9:00–13:00", duration: "Half Day", totalPrice: 50, paymentMethod: "Cash", paymentStatus: "Unpaid", bookingStatus: "Upcoming", paymentDeadline: "2026-05-15", bookingMode: "single" },
+  { id: "MQR-20385", itemId: "R-2", itemType: "room", location: "Nablus", userId: 1, date: "2026-04-28", time: "14:00–18:00", duration: "Half Day", totalPrice: 140, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed", bookingMode: "single" },
+  { id: "MQR-20201", itemId: "A-5", itemType: "desk", location: "Nablus", userId: 1, date: "2026-04-15", time: "10:00–12:00", duration: "1 Hour", totalPrice: 30, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed", bookingMode: "multi-day", multiDays: ["2026-04-15","2026-04-16","2026-04-17"] },
+  { id: "MQR-20155", itemId: "A-2", itemType: "desk", location: "Nablus", userId: 1, date: "2026-04-07", time: "9:00–10:00", duration: "1 Hour", totalPrice: 300, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed", bookingMode: "recurring", recurringPattern: "weekly", recurringEndDate: "2026-05-07" },
+  { id: "MQR-20100", itemId: "R-1", itemType: "room", location: "Nablus", userId: 1, date: "2026-04-01", time: "10:00–12:00", duration: "1 Hour", totalPrice: 200, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed", bookingMode: "team", teamMembers: ["tala@email.com", "omar@email.com", "sara@email.com"], teamDeskIds: ["A-4","A-5","A-7","A-8"] },
+  { id: "MQR-10001", itemId: "A-2", itemType: "desk", location: "Nablus", userName: "Tala", date: "2026-05-01", time: "9:00-17:00", duration: "Full Day", totalPrice: 85, paymentMethod: "Cash", paymentStatus: "Unpaid", bookingStatus: "Upcoming", paymentDeadline: "2026-05-04" },
+  { id: "MQR-10002", itemId: "R-1", itemType: "room", location: "Nablus", userName: "Omar", date: "2026-05-02", time: "10:00-11:00", duration: "1 Hour", totalPrice: 40, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Upcoming" },
+  { id: "MQR-10003", itemId: "B-1", itemType: "desk", location: "Ramallah", userName: "Rami", date: "2026-05-03", time: "9:00-13:00", duration: "Half Day", totalPrice: 50, paymentMethod: "Cash", paymentStatus: "Unpaid", bookingStatus: "Upcoming", paymentDeadline: "2026-05-06" },
+  { id: "MQR-10004", itemId: "A-4", itemType: "desk", location: "Nablus", userName: "Sara", date: "2026-04-30", time: "12:00-16:00", duration: "Half Day", totalPrice: 50, paymentMethod: "Cash", paymentStatus: "Paid", bookingStatus: "Completed" },
 ];
 
 const initialMembers: Member[] = [
@@ -137,6 +173,16 @@ const initialMembers: Member[] = [
   { id: 7, name: "Anonymous Member", role: "", isAnonymous: true, location: "Ramallah" },
 ];
 
+const initialWaitlist: WaitlistEntry[] = [
+  { id: "WL-001", itemId: "A-3", itemType: "desk", userEmail: "sara@email.com", date: "2026-05-12", timeSlot: "9:00–13:00", createdAt: "2026-05-10T09:00:00Z" },
+  { id: "WL-002", itemId: "R-3", itemType: "room", userEmail: "rami@email.com", date: "2026-05-13", timeSlot: "10:00–12:00", createdAt: "2026-05-10T11:00:00Z" },
+];
+
+const initialSupportTickets: SupportTicket[] = [
+  { id: "TKT-001", name: "Tala Ahmed", email: "tala@email.com", subject: "Cannot modify my booking", message: "I tried to modify booking MQR-20491 but the button is not working.", category: "booking", status: "open", createdAt: "2026-05-09T10:30:00Z" },
+  { id: "TKT-002", name: "Omar Saleh", email: "omar@email.com", subject: "WiFi speed issue at Desk A-2", message: "The WiFi was much slower than advertised during my session yesterday.", category: "technical", status: "in-progress", createdAt: "2026-05-08T14:00:00Z" },
+];
+
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
@@ -147,6 +193,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [bookings, setBookings] = useState<Booking[]>(initialBookings);
   const [members, setMembers] = useState<Member[]>(initialMembers);
   const [bookingDraft, setBookingDraft] = useState<Partial<Booking> | null>(null);
+  const [favorites, setFavorites] = useState<string[]>(["A-1", "A-5"]);
+  const [waitlist, setWaitlist] = useState<WaitlistEntry[]>(initialWaitlist);
+  const [supportTickets, setSupportTickets] = useState<SupportTicket[]>(initialSupportTickets);
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
+
+  const toggleFavorite = (id: string) => {
+    setFavorites(prev =>
+      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
+    );
+  };
+
+  const addSupportTicket = (ticket: Omit<SupportTicket, "id" | "status" | "createdAt">) => {
+    const newTicket: SupportTicket = {
+      ...ticket,
+      id: `TKT-${String(supportTickets.length + 3).padStart(3, "0")}`,
+      status: "open",
+      createdAt: new Date().toISOString(),
+    };
+    setSupportTickets(prev => [newTicket, ...prev]);
+  };
 
   return (
     <AppContext.Provider value={{
@@ -156,7 +222,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       rooms, setRooms,
       bookings, setBookings,
       members, setMembers,
-      bookingDraft, setBookingDraft
+      bookingDraft, setBookingDraft,
+      favorites, toggleFavorite,
+      waitlist, setWaitlist,
+      supportTickets, addSupportTicket,
+      hasSeenOnboarding, setHasSeenOnboarding,
     }}>
       {children}
     </AppContext.Provider>
@@ -165,8 +235,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
 export function useAppContext() {
   const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
+  if (!context) throw new Error("useAppContext must be used within an AppProvider");
   return context;
 }

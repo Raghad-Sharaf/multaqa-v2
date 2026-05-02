@@ -5,93 +5,108 @@ import { useAppContext, Booking } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { format, isPast, parseISO } from "date-fns";
-import { MapPin, Calendar, Clock, Download, AlertCircle } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { MapPin, Calendar, Clock, Download, AlertCircle, Users, RefreshCw, Layers } from "lucide-react";
+
+const modeBadge: Record<string, { label: string; icon: React.ReactNode; cls: string }> = {
+  single: { label: "Single", icon: <Calendar className="w-3 h-3" />, cls: "bg-muted text-muted-foreground border-border" },
+  "multi-day": { label: "Multi-Day", icon: <Layers className="w-3 h-3" />, cls: "bg-secondary/10 text-secondary border-secondary/20" },
+  recurring: { label: "Recurring", icon: <RefreshCw className="w-3 h-3" />, cls: "bg-primary/10 text-primary border-primary/20" },
+  team: { label: "Team", icon: <Users className="w-3 h-3" />, cls: "bg-success/10 text-success border-success/20" },
+};
 
 export default function MyReservations() {
   const { currentUser, bookings, desks, rooms, setBookings } = useAppContext();
-  const [location, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
-    if (!currentUser) {
-      setLocation("/login");
-    }
+    if (!currentUser) setLocation("/login");
   }, [currentUser, setLocation]);
 
   if (!currentUser) return null;
 
   const userBookings = bookings.filter(b => b.userId === currentUser.id);
-  
-  // Sort by date descending
-  const sortedBookings = [...userBookings].sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  const sorted = [...userBookings].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  const upcomingBookings = sortedBookings.filter(b => b.bookingStatus === "Upcoming");
-  const pastBookings = sortedBookings.filter(b => b.bookingStatus === "Completed" || b.bookingStatus === "Cancelled");
+  const upcomingBookings = sorted.filter(b => b.bookingStatus === "Upcoming");
+  const pastBookings = sorted.filter(b => b.bookingStatus !== "Upcoming");
 
   const handleCancel = (bookingId: string) => {
     if (confirm("Are you sure you want to cancel this booking?")) {
-      setBookings(prev => 
-        prev.map(b => b.id === bookingId ? { ...b, bookingStatus: "Cancelled" } : b)
-      );
+      setBookings(prev => prev.map(b => b.id === bookingId ? { ...b, bookingStatus: "Cancelled" } : b));
     }
   };
 
   const BookingCard = ({ booking }: { booking: Booking }) => {
-    const item = booking.itemType === "desk" 
-      ? desks.find(d => d.id === booking.itemId) 
+    const item = booking.itemType === "desk"
+      ? desks.find(d => d.id === booking.itemId)
       : rooms.find(r => r.id === booking.itemId);
-      
+
     if (!item) return null;
 
     const isUpcoming = booking.bookingStatus === "Upcoming";
     const isCancelled = booking.bookingStatus === "Cancelled";
+    const mode = booking.bookingMode || "single";
+    const mb = modeBadge[mode];
 
     return (
-      <div className={`bg-white rounded-xl border border-border shadow-sm overflow-hidden mb-6 ${isCancelled ? 'opacity-60 grayscale' : ''}`}>
+      <div className={`bg-white rounded-xl border border-border shadow-sm overflow-hidden mb-6 ${isCancelled ? "opacity-60 grayscale" : ""}`}>
         <div className="flex flex-col md:flex-row">
-          
-          {/* Status Bar (Mobile Top, Desktop Left) */}
-          <div className={`h-2 md:h-auto md:w-2 ${
-            isCancelled ? 'bg-muted-foreground' :
-            isUpcoming ? 'bg-primary' : 'bg-success'
-          }`} />
-          
+          <div className={`h-2 md:h-auto md:w-2 ${isCancelled ? "bg-muted-foreground" : isUpcoming ? "bg-primary" : "bg-success"}`} />
           <div className="p-6 flex-1 flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-48 h-32 md:h-full bg-muted rounded-lg overflow-hidden shrink-0">
               <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
             </div>
-            
+
             <div className="flex-1">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
                 <div>
-                  <div className="flex gap-2 items-center mb-1">
+                  <div className="flex flex-wrap gap-2 items-center mb-1">
                     <h3 className="font-bold text-xl text-secondary">{item.name}</h3>
                     <Badge variant="outline" className="text-xs bg-muted border-border font-medium text-muted-foreground">
                       {booking.id}
+                    </Badge>
+                    <Badge variant="outline" className={`text-xs flex items-center gap-1 ${mb.cls}`}>
+                      {mb.icon} {mb.label}
                     </Badge>
                   </div>
                   <p className="text-muted-foreground flex items-center gap-1.5 text-sm font-medium">
                     <MapPin className="w-4 h-4" /> Multaqa — {booking.location}
                   </p>
                 </div>
-                
-                <div className="flex gap-2">
-                  <Badge className={`
-                    ${booking.paymentStatus === 'Paid' ? 'bg-success hover:bg-success' : 'bg-warning hover:bg-warning'} 
-                    text-white border-none
-                  `}>
+
+                <div className="flex gap-2 flex-wrap">
+                  <Badge className={`${booking.paymentStatus === "Paid" ? "bg-success hover:bg-success" : "bg-warning hover:bg-warning"} text-white border-none`}>
                     {booking.paymentStatus}
                   </Badge>
-                  <Badge variant="outline" className={`
-                    ${isUpcoming ? 'border-primary text-primary' : 
-                      isCancelled ? 'border-destructive text-destructive' : 'border-success text-success'}
-                  `}>
+                  <Badge variant="outline" className={`${isUpcoming ? "border-primary text-primary" : isCancelled ? "border-destructive text-destructive" : "border-success text-success"}`}>
                     {booking.bookingStatus}
                   </Badge>
                 </div>
               </div>
+
+              {/* Mode-specific details */}
+              {mode === "multi-day" && booking.multiDays && (
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {booking.multiDays.map(d => (
+                    <span key={d} className="text-xs bg-secondary/10 text-secondary px-2 py-0.5 rounded-md font-medium">
+                      {format(parseISO(d), "MMM d")}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {mode === "recurring" && (
+                <div className="flex items-center gap-2 mb-3 text-xs text-primary bg-primary/5 px-3 py-1.5 rounded-md w-fit border border-primary/10">
+                  <RefreshCw className="w-3 h-3" /> {booking.recurringPattern === "weekly" ? "Weekly" : "Daily"} until {booking.recurringEndDate ? format(parseISO(booking.recurringEndDate), "MMM d, yyyy") : "—"}
+                </div>
+              )}
+
+              {mode === "team" && booking.teamMembers && booking.teamMembers.length > 0 && (
+                <div className="flex items-center gap-2 mb-3 text-xs text-success bg-success/5 px-3 py-1.5 rounded-md w-fit border border-success/10">
+                  <Users className="w-3 h-3" /> {booking.teamMembers.length + 1} members · {booking.teamDeskIds?.length || 1} desks
+                </div>
+              )}
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-y border-border mb-4">
                 <div>
@@ -121,11 +136,9 @@ export default function MyReservations() {
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 {isUpcoming && booking.paymentStatus === "Unpaid" ? (
                   <div className="text-sm font-medium text-warning flex items-center gap-1.5 bg-warning/10 px-3 py-1.5 rounded-md border border-warning/20">
-                    <AlertCircle className="w-4 h-4" /> Cash due on-site by {format(parseISO(booking.paymentDeadline!), "MMM d, yyyy")}
+                    <AlertCircle className="w-4 h-4" /> Cash due by {format(parseISO(booking.paymentDeadline!), "MMM d, yyyy")}
                   </div>
-                ) : (
-                  <div></div> // Spacer
-                )}
+                ) : <div />}
 
                 <div className="flex gap-3 w-full sm:w-auto">
                   {!isCancelled && (
@@ -173,28 +186,24 @@ export default function MyReservations() {
               Past & Cancelled ({pastBookings.length})
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="upcoming">
-            {upcomingBookings.length > 0 ? (
-              upcomingBookings.map(booking => <BookingCard key={booking.id} booking={booking} />)
-            ) : (
+            {upcomingBookings.length > 0 ? upcomingBookings.map(b => <BookingCard key={b.id} booking={b} />) : (
               <div className="text-center py-20 bg-white rounded-xl border border-border shadow-sm">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                   <Calendar className="w-8 h-8 text-muted-foreground" />
                 </div>
                 <h3 className="text-xl font-bold text-secondary mb-2">No upcoming bookings</h3>
                 <p className="text-muted-foreground mb-6">Find your perfect desk or meeting room.</p>
-                <Link href="/">
+                <Link href="/desks">
                   <Button className="bg-primary hover:bg-primary/90 text-white">Browse Spaces</Button>
                 </Link>
               </div>
             )}
           </TabsContent>
-          
+
           <TabsContent value="past">
-            {pastBookings.length > 0 ? (
-              pastBookings.map(booking => <BookingCard key={booking.id} booking={booking} />)
-            ) : (
+            {pastBookings.length > 0 ? pastBookings.map(b => <BookingCard key={b.id} booking={b} />) : (
               <div className="text-center py-20 bg-white rounded-xl border border-border shadow-sm">
                 <p className="text-muted-foreground">No past bookings found.</p>
               </div>
