@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useAppContext } from "@/context/AppContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -7,6 +8,13 @@ import { Heart, LifeBuoy, BookOpen } from "lucide-react";
 export function Navbar() {
   const { currentUser, setCurrentUser, favorites } = useAppContext();
   const [, setLocation] = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleLogout = () => {
     setCurrentUser(null);
@@ -15,11 +23,15 @@ export function Navbar() {
 
   return (
     <nav
-      className="sticky top-0 z-50 border-b border-black/8 py-3 px-6 md:px-12 flex items-center justify-between shadow-sm"
+      className="sticky top-0 z-50 py-3 px-6 md:px-12 flex items-center justify-between transition-all duration-300"
       style={{
-        backgroundColor: "color-mix(in oklab, var(--background) 95%, transparent)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        backgroundColor: scrolled
+          ? "color-mix(in oklab, var(--background) 95%, transparent)"
+          : "transparent",
+        backdropFilter: scrolled ? "blur(14px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(0,18,121,0.08)" : "1px solid transparent",
+        boxShadow: scrolled ? "0 1px 16px rgba(0,0,0,0.06)" : "none",
       }}
     >
       {/* Logo */}
@@ -53,7 +65,6 @@ export function Navbar() {
       <div className="flex items-center gap-3">
         {currentUser ? (
           <div className="flex items-center gap-3">
-            {/* Favourites badge */}
             <Link
               href="/desks"
               className="relative hidden md:flex items-center transition-colors"
@@ -64,8 +75,10 @@ export function Navbar() {
             >
               <Heart className="w-5 h-5" />
               {favorites.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center text-white"
-                  style={{ background: "#FF5100" }}>
+                <span
+                  className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center text-white"
+                  style={{ background: "#FF5100" }}
+                >
                   {favorites.length}
                 </span>
               )}
@@ -136,7 +149,7 @@ export function Navbar() {
               <Button
                 size="sm"
                 className="text-white font-semibold rounded-lg px-5"
-                style={{ background: "#FF5100", borderColor: "transparent" }}
+                style={{ background: "#FF5100" }}
                 onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
                 onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}
               >
