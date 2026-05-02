@@ -92,7 +92,6 @@ export default function Home() {
           alignItems: "center",
         }}
       >
-        {/* subtle dot grid */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -102,17 +101,17 @@ export default function Home() {
           }}
         />
 
-        <div className="w-full max-w-5xl mx-auto px-6 md:px-8 py-16 relative z-10">
+        <div className="w-full max-w-6xl mx-auto px-6 md:px-8 py-16 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
 
-            {/* ── Left: copy ── */}
+            {/* ── Left ── */}
             <motion.div
               initial={{ opacity: 0, x: -24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               className="flex flex-col gap-5"
             >
-              {/* Live badge — green dot inside pill */}
+              {/* Live badge */}
               <div className="self-start">
                 <span
                   className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full border"
@@ -127,27 +126,24 @@ export default function Home() {
                 </span>
               </div>
 
-              {/* Headline */}
+              {/* Headline — 60px on desktop */}
               <div className="-mb-1">
                 <h1
                   className="font-extrabold leading-[1.06] tracking-tight"
-                  style={{ fontSize: "clamp(2.6rem, 5.5vw, 4.5rem)", color: "#001279" }}
+                  style={{ fontSize: "clamp(40px, 5vw, 60px)", color: "#001279" }}
                 >
                   Your seat.
                 </h1>
                 <h1
                   className="font-extrabold leading-[1.06] tracking-tight"
-                  style={{ fontSize: "clamp(2.6rem, 5.5vw, 4.5rem)", color: "#FF5100" }}
+                  style={{ fontSize: "clamp(40px, 5vw, 60px)", color: "#FF5100" }}
                 >
                   Secured.
                 </h1>
               </div>
 
               {/* Description */}
-              <p
-                className="text-base leading-relaxed max-w-sm"
-                style={{ color: "#535060" }}
-              >
+              <p className="text-base leading-relaxed max-w-sm" style={{ color: "#535060" }}>
                 Browse our desks and rooms, check live availability, and lock in your
                 spot before you leave home. No more walk-in surprises.
               </p>
@@ -157,17 +153,10 @@ export default function Home() {
                 <Link href="/desks">
                   <Button
                     size="lg"
-                    className="h-12 px-7 rounded-xl text-white font-semibold text-sm flex items-center gap-2"
-                    style={{
-                      background: "#FF5100",
-                      boxShadow: "0 6px 20px rgba(255,81,0,.28)",
-                    }}
-                    onMouseEnter={e =>
-                      ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")
-                    }
-                    onMouseLeave={e =>
-                      ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")
-                    }
+                    className="h-12 px-7 rounded-xl text-white font-semibold text-sm flex items-center gap-2 border-0"
+                    style={{ background: "#FF5100", boxShadow: "0 6px 20px rgba(255,81,0,.28)" }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
+                    onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}
                   >
                     Browse Desks <ArrowRight className="w-4 h-4" />
                   </Button>
@@ -230,13 +219,11 @@ export default function Home() {
               transition={{ duration: 0.55, delay: 0.1 }}
               className="hidden lg:flex items-center justify-end"
             >
-              {/* Peach-tinted frame matching screenshot */}
               <div
                 className="rounded-[2.25rem] p-3"
                 style={{
                   background: "oklch(93% .04 50)",
-                  boxShadow:
-                    "0 20px 60px rgba(0,18,121,0.10), 0 4px 16px rgba(0,0,0,0.06)",
+                  boxShadow: "0 20px 60px rgba(0,18,121,0.10), 0 4px 16px rgba(0,0,0,0.06)",
                 }}
               >
                 <img
@@ -253,12 +240,9 @@ export default function Home() {
 
       {/* ── How it works ── */}
       <section className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-6 md:px-8">
+        <div className="max-w-6xl mx-auto px-6 md:px-8">
           <div className="text-center mb-14">
-            <h2
-              className="text-3xl md:text-4xl font-bold mb-3"
-              style={{ color: "#001279" }}
-            >
+            <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: "#001279" }}>
               Book in 3 steps
             </h2>
             <p style={{ color: "#535060" }}>
@@ -274,7 +258,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: i * 0.08 }}
-                className="group bg-white rounded-2xl border p-6 flex flex-col gap-4 transition-all duration-200 cursor-default"
+                className="bg-white rounded-2xl border p-6 flex flex-col gap-4 transition-all duration-200 cursor-default"
                 style={{ borderColor: "rgba(0,18,121,0.1)" }}
                 onMouseEnter={e => {
                   (e.currentTarget as HTMLDivElement).style.borderColor = "#FF5100";
@@ -292,20 +276,13 @@ export default function Home() {
                   >
                     {step.icon}
                   </div>
-                  <span
-                    className="text-xs font-bold tracking-widest uppercase"
-                    style={{ color: "#535060" }}
-                  >
+                  <span className="text-xs font-bold tracking-widest uppercase" style={{ color: "#535060" }}>
                     STEP {step.num}
                   </span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold mb-2" style={{ color: "#001279" }}>
-                    {step.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "#535060" }}>
-                    {step.desc}
-                  </p>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: "#001279" }}>{step.title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#535060" }}>{step.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -315,13 +292,10 @@ export default function Home() {
 
       {/* ── Features 3×2 Grid ── */}
       <section className="py-20" style={{ backgroundColor: "var(--navy-tint)" }}>
-        <div className="max-w-5xl mx-auto px-6 md:px-8">
+        <div className="max-w-6xl mx-auto px-6 md:px-8">
           <div className="text-center mb-14">
-            <h2
-              className="text-3xl md:text-4xl font-bold mb-3"
-              style={{ color: "#001279" }}
-            >
-              Everything your workspace needs
+            <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: "#001279" }}>
+              Everything you need
             </h2>
             <p className="max-w-xl mx-auto" style={{ color: "#535060" }}>
               From team collaboration to personal productivity — Multaqa has the tools to
@@ -347,12 +321,8 @@ export default function Home() {
                   {f.icon}
                 </div>
                 <div>
-                  <h3 className="font-bold text-base mb-1.5" style={{ color: "#001279" }}>
-                    {f.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "#535060" }}>
-                    {f.desc}
-                  </p>
+                  <h3 className="font-bold text-base mb-1.5" style={{ color: "#001279" }}>{f.title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#535060" }}>{f.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -362,19 +332,13 @@ export default function Home() {
 
       {/* ── Why Multaqa ── */}
       <section className="py-20 bg-white border-t" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
-        <div className="max-w-5xl mx-auto px-6 md:px-8">
+        <div className="max-w-6xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span
-                className="text-xs font-bold uppercase tracking-widest"
-                style={{ color: "#FF5100" }}
-              >
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FF5100" }}>
                 Why Multaqa
               </span>
-              <h2
-                className="text-3xl md:text-4xl font-bold mt-3 mb-8"
-                style={{ color: "#001279" }}
-              >
+              <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-8" style={{ color: "#001279" }}>
                 Everything you need to do your best work.
               </h2>
               <div className="space-y-6">
@@ -396,8 +360,8 @@ export default function Home() {
                 <Link href="/desks">
                   <Button
                     size="lg"
-                    className="h-12 px-8 rounded-xl text-white font-semibold"
-                    style={{ background: "#001279" }}
+                    className="h-12 px-8 rounded-xl text-white font-semibold border-0 focus:ring-0 focus:outline-none"
+                    style={{ background: "#001279", border: "none", boxShadow: "none" }}
                     onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#001899")}
                     onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#001279")}
                   >
@@ -416,20 +380,44 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ── */}
-      <section className="py-20" style={{ backgroundImage: "linear-gradient(135deg, #000840, #001279 50%, #001D99)" }}>
-        <div className="max-w-5xl mx-auto px-6 md:px-8 text-center">
+      <section
+        className="py-24 relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #0D1117 0%, #001060 55%, #0D0A2E 100%)",
+        }}
+      >
+        {/* Orange radial glow left */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 15% 60%, rgba(255,81,0,0.22) 0%, transparent 55%), radial-gradient(ellipse at 85% 30%, rgba(0,29,153,0.5) 0%, transparent 50%)",
+          }}
+        />
+        {/* Subtle dot grid */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={{
+            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+
+        <div className="max-w-6xl mx-auto px-6 md:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to book your space?
           </h2>
-          <p className="text-white/70 mb-10 max-w-xl mx-auto text-lg">
+          <p className="mb-10 max-w-xl mx-auto text-lg" style={{ color: "rgba(255,255,255,0.65)" }}>
             Join hundreds of professionals working smarter across Nablus and Ramallah.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/desks">
               <Button
                 size="lg"
-                className="h-14 px-10 text-base text-white font-semibold rounded-xl"
-                style={{ background: "#FF5100", boxShadow: "0 8px 24px rgba(255,81,0,0.35)" }}
+                className="h-14 px-10 text-base text-white font-semibold rounded-xl border-0"
+                style={{ background: "#FF5100", boxShadow: "0 8px 28px rgba(255,81,0,0.40)" }}
+                onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
+                onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}
               >
                 Browse Desks
               </Button>
@@ -438,7 +426,8 @@ export default function Home() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 px-10 text-base rounded-xl font-semibold text-white border-white/30 hover:bg-white/10"
+                className="h-14 px-10 text-base rounded-xl font-semibold text-white hover:bg-white/10 transition-colors"
+                style={{ borderColor: "rgba(255,255,255,0.25)" }}
               >
                 Browse Rooms
               </Button>
