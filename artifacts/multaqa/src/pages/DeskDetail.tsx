@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useRoute } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
 import { useAppContext } from "@/context/AppContext";
-import { ArrowLeft, Wifi, CheckCircle2, Star, MapPin, Heart, BellRing } from "lucide-react";
+import { ArrowLeft, Wifi, CheckCircle2, Star, MapPin, Heart, BellRing, X } from "lucide-react";
 import { NotFound } from "@/pages/not-found";
 import { WaitlistModal } from "@/components/WaitlistModal";
 

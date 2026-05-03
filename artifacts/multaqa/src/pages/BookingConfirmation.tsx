@@ -41,7 +41,7 @@ export default function BookingConfirmation() {
   return (
     <UserLayout>
       <div className="flex-1 py-8" style={{ background: "oklch(97% .01 268)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 max-w-3xl">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
 
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}

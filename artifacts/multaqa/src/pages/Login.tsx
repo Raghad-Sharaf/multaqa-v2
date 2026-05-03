@@ -111,9 +111,6 @@ export default function Login() {
             <p className="mb-4">
               Don't have an account? <Link href="/register" className="text-primary font-medium hover:underline">Sign up</Link>
             </p>
-            <div className="p-4 bg-accent/30 rounded-lg border border-accent">
-              <p className="text-secondary font-medium">You can also book without an account — just enter your email at checkout.</p>
-            </div>
           </div>
         </div>
       </div>

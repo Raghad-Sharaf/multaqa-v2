@@ -12,7 +12,7 @@ const steps = [
   {
     icon: <Users className="w-5 h-5" />,
     title: "Bring your whole team",
-    desc: "One user selects a room and books for the whole team. Confirmation goes to every team member automatically.",
+    desc: "Book a room for your entire team in one go — pick a date, add members, and everyone gets a confirmation.",
   },
   {
     icon: <RefreshCw className="w-5 h-5" />,
