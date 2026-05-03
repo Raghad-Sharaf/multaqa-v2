@@ -117,11 +117,13 @@ export default function BookingStep1() {
     setLocation("/book/step2");
   };
 
+  const canTeamBook = itemType === "room" && (item as { capacity?: number }).capacity != null && (item as { capacity: number }).capacity > 1;
+
   const modes: { id: BookingMode; label: string; icon: React.ReactNode }[] = [
     { id: "single", label: "Single Day", icon: <User className="w-3.5 h-3.5" /> },
     { id: "multi-day", label: "Multi-Day", icon: <Layers className="w-3.5 h-3.5" /> },
     { id: "recurring", label: "Recurring", icon: <RefreshCw className="w-3.5 h-3.5" /> },
-    { id: "team", label: "Team", icon: <Users className="w-3.5 h-3.5" /> },
+    ...(canTeamBook ? [{ id: "team" as BookingMode, label: "Team", icon: <Users className="w-3.5 h-3.5" /> }] : []),
   ];
 
   return (

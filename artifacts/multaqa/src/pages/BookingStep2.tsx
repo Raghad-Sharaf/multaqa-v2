@@ -113,7 +113,7 @@ export default function BookingStep2() {
         <div className="flex-1 space-y-8">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-2xl font-bold text-secondary">Review your booking</h2>
+              <h2 className="font-bold text-secondary" style={{ fontSize: "22px" }}>Review your booking</h2>
               <Badge className="flex items-center gap-1.5 bg-primary/10 text-primary border-primary/20 font-medium">
                 {modeIcon[mode]} {modeLabel[mode]}
               </Badge>
@@ -125,7 +125,7 @@ export default function BookingStep2() {
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <h3 className="text-xl font-bold text-secondary">{item.name}</h3>
+                  <h3 className="font-bold text-secondary" style={{ fontSize: "16px" }}>{item.name}</h3>
                   <p className="text-muted-foreground">{bookingDraft.itemType === "desk" ? "Coworking Desk" : "Meeting Room"} • {item.location}</p>
                 </div>
               </div>
@@ -210,7 +210,7 @@ export default function BookingStep2() {
                   </div>
                   <div className="col-span-2">
                     <span className="text-xs text-muted-foreground uppercase font-semibold tracking-wider block mb-1">Total Price</span>
-                    <span className="font-bold text-primary text-2xl">{bookingDraft.totalPrice} ILS</span>
+                    <span className="font-bold text-primary" style={{ fontSize: "18px" }}>{bookingDraft.totalPrice} ILS</span>
                   </div>
                 </div>
               </div>
@@ -307,7 +307,7 @@ export default function BookingStep2() {
         {/* Right Column: Summary */}
         <div className="w-full md:w-80 lg:w-96 shrink-0">
           <div className="sticky top-24 bg-white rounded-2xl border border-border shadow-lg p-6 flex flex-col">
-            <h3 className="font-bold text-xl text-secondary mb-6 pb-4 border-b border-border">Summary</h3>
+            <h3 className="font-bold text-secondary mb-6 pb-4 border-b border-border" style={{ fontSize: "18px" }}>Summary</h3>
 
             <div className="space-y-3 mb-6 text-sm">
               <div className="flex justify-between">
@@ -337,12 +337,12 @@ export default function BookingStep2() {
               </div>
               <div className="flex justify-between pt-4 border-t border-border">
                 <span className="text-secondary font-bold">Total Due</span>
-                <span className="font-bold text-primary text-2xl">{bookingDraft.totalPrice} ILS</span>
+                <span className="font-bold text-primary" style={{ fontSize: "18px" }}>{bookingDraft.totalPrice} ILS</span>
               </div>
             </div>
 
             <Button
-              size="lg" className="w-full h-14 text-lg font-medium shadow-md shadow-primary/20 mb-4"
+              size="lg" className="w-full h-11 font-medium shadow-md shadow-primary/20 mb-4 text-[14px]"
               disabled={!isEmailValid || isLoading}
               onClick={handleConfirm}
             >

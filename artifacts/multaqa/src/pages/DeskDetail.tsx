@@ -6,10 +6,17 @@ import { ArrowLeft, Wifi, CheckCircle2, Star, MapPin, Heart, BellRing } from "lu
 import { NotFound } from "@/pages/not-found";
 import { WaitlistModal } from "@/components/WaitlistModal";
 
+const DESK_TYPE_DESC: Record<string, string> = {
+  "Flex Desk": "Any available desk for the day. Choose any open spot on arrival.",
+  "Hot Desk": "General-purpose, first-come first-served. Great for drop-in sessions.",
+  "Dedicated Desk": "Your own assigned desk, reserved exclusively for your use every time.",
+};
+
 export default function DeskDetail() {
   const [match, params] = useRoute("/desks/:id");
   const { desks, favorites, toggleFavorite } = useAppContext();
   const [showWaitlist, setShowWaitlist] = useState(false);
+  const [showTypeTooltip, setShowTypeTooltip] = useState(false);
 
   if (!match || !params.id) return <NotFound />;
   const desk = desks.find(d => d.id === params.id);
@@ -65,9 +72,37 @@ export default function DeskDetail() {
                   style={{ background: desk.zone === "Deep Work" ? "#001279" : "#FF5100" }}>
                   {desk.zone === "Deep Work" ? "Deep Work Zone" : "Calls Allowed"}
                 </span>
-                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border" style={{ color: "#535060", borderColor: "oklch(90% .005 285)" }}>
-                  {desk.type}
-                </span>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowTypeTooltip(v => !v)}
+                    className="text-[11px] font-bold px-2.5 py-1 rounded-full border transition-colors"
+                    style={{ color: "#535060", borderColor: "oklch(90% .005 285)", background: "white" }}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = "#FF5100")}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = showTypeTooltip ? "#FF5100" : "oklch(90% .005 285)")}
+                  >
+                    {desk.type} <span style={{ fontSize: "9px", opacity: 0.6 }}>ⓘ</span>
+                  </button>
+                  {showTypeTooltip && (
+                    <div
+                      className="absolute left-0 top-full mt-2 bg-white rounded-xl shadow-xl z-20 p-4"
+                      style={{ border: "1px solid oklch(90% .005 285)", width: "240px" }}
+                    >
+                      <div className="flex items-start justify-between mb-1.5">
+                        <p className="font-bold" style={{ fontSize: "13px", color: "#001279" }}>{desk.type}</p>
+                        <button
+                          onClick={() => setShowTypeTooltip(false)}
+                          className="w-5 h-5 rounded-full flex items-center justify-center ml-2 shrink-0"
+                          style={{ background: "oklch(94% .005 285)", color: "#535060" }}
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                      <p style={{ fontSize: "12px", color: "#535060", lineHeight: 1.5 }}>
+                        {DESK_TYPE_DESC[desk.type] ?? ""}
+                      </p>
+                    </div>
+                  )}
+                </div>
                 <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border"
                   style={{
                     color: desk.status === "Available" ? "#1A7A4A" : desk.status === "Reserved" ? "#CC2200" : "#D97706",

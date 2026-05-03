@@ -13,12 +13,14 @@ function Pill({ label, active, onClick }: { label: string; active: boolean; onCl
   return (
     <button
       onClick={onClick}
-      className="px-3 py-1 rounded-full text-xs sm:text-sm font-medium border transition-all whitespace-nowrap"
-      style={
-        active
+      className="px-3 py-1 rounded-full font-medium border transition-all whitespace-nowrap"
+      style={{
+        fontSize: "12px",
+        ...(active
           ? { background: "#FF5100", color: "white", borderColor: "#FF5100" }
-          : { background: "white", color: "#535060", borderColor: "rgba(0,0,0,0.18)" }
-      }
+          : { background: "white", color: "oklch(50% .02 290)", borderColor: "rgba(0,0,0,0.15)" }
+        )
+      }}
     >
       {label}
     </button>
@@ -73,13 +75,13 @@ export default function Rooms() {
           <div className="w-full bg-white rounded-xl border p-3 sm:p-4 space-y-2.5" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
             <div className="flex items-center flex-wrap gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 shrink-0" style={{ color: "#535060" }} />
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Type:</span>
+              <span style={{ fontSize: "12px", fontWeight: 600, color: "oklch(50% .02 290)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Type:</span>
               {(["All", "Private Office", "Meeting Room", "Phone Booth"] as const).map(t => (
                 <Pill key={t} label={t} active={filterType === t} onClick={() => setFilterType(t)} />
               ))}
             </div>
             <div className="flex items-center flex-wrap gap-2">
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Amenity:</span>
+              <span style={{ fontSize: "12px", fontWeight: 600, color: "oklch(50% .02 290)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Amenity:</span>
               {(["All", "Whiteboard", "TV Screen", "Video Conf"] as const).map(a => (
                 <Pill key={a} label={a} active={filterAmenity === a} onClick={() => setFilterAmenity(a)} />
               ))}

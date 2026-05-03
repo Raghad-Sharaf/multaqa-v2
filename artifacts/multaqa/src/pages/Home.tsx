@@ -13,7 +13,7 @@ const features = [
   {
     icon: <Users className="w-5 h-5" />,
     title: "Team Booking",
-    desc: "Reserve adjacent desks for your whole team in one checkout. Confirmation sent to every member automatically.",
+    desc: "Select a room and book it for your whole team in one checkout. Confirmation goes to every team member automatically.",
     color: "#001279", bg: "#E8EBFF",
   },
   {

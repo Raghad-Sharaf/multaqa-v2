@@ -54,13 +54,13 @@ export default function Support() {
 
   return (
     <UserLayout>
-      <div className="bg-secondary text-white py-12">
+      <div className="bg-white border-b py-10" style={{ borderColor: "oklch(90% .005 285)" }}>
         <div className="container mx-auto px-6 max-w-5xl">
-          <div className="flex items-center gap-3 mb-3">
-            <MessageSquare className="w-7 h-7 text-primary" />
-            <h1 className="text-3xl font-bold">Customer Support</h1>
+          <div className="flex items-center gap-3 mb-2">
+            <MessageSquare className="w-6 h-6" style={{ color: "#FF5100" }} />
+            <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: "#001279" }}>Customer Support</h1>
           </div>
-          <p className="text-white/70">We're here to help. Submit a ticket and we'll respond within 24 hours.</p>
+          <p className="text-[14px]" style={{ color: "#535060" }}>We're here to help. Submit a ticket and we'll respond within 24 hours.</p>
         </div>
       </div>
 
@@ -223,10 +223,10 @@ export default function Support() {
               </div>
             </div>
 
-            <div className="rounded-2xl p-6 text-white" style={{ background: "linear-gradient(135deg,#001279,#001D99)" }}>
-              <AlertCircle className="w-6 h-6 text-primary mb-3" />
-              <p className="font-bold text-sm mb-1">Response Time</p>
-              <p className="text-white/70 text-sm">We aim to respond to all tickets within 24 hours during business days.</p>
+            <div className="rounded-2xl p-6 bg-white border" style={{ borderColor: "oklch(90% .005 285)" }}>
+              <AlertCircle className="w-6 h-6 mb-3" style={{ color: "#FF5100" }} />
+              <p className="font-bold text-[14px] mb-1" style={{ color: "#001279" }}>Response Time</p>
+              <p className="text-[13px]" style={{ color: "#535060" }}>We aim to respond to all tickets within 24 hours during business days.</p>
             </div>
           </div>
         </div>
