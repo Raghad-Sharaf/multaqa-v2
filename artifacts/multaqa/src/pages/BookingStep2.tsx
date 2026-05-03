@@ -181,22 +181,10 @@ export default function BookingStep2() {
                           <span className="font-medium text-secondary">{format(new Date(bookingDraft.date!), "EEE, MMM d, yyyy")}</span>
                         </div>
                         <div>
-                          <span className="text-xs text-muted-foreground uppercase font-semibold tracking-wider block mb-1">Seats Reserved</span>
-                          <span className="font-medium text-secondary">{teamDeskIds.length} adjacent desks</span>
+                          <span className="text-xs text-muted-foreground uppercase font-semibold tracking-wider block mb-1">Team Members</span>
+                          <span className="font-medium text-secondary">{bookingDraft.teamMembers?.filter(Boolean).length || 0} members</span>
                         </div>
                       </div>
-                      {teamDeskIds.length > 0 && (
-                        <div>
-                          <span className="text-xs text-muted-foreground uppercase font-semibold tracking-wider block mb-2">Assigned Desks</span>
-                          <div className="flex flex-wrap gap-2">
-                            {teamDeskIds.map(id => (
-                              <span key={id} className="bg-secondary/10 text-secondary text-xs font-medium px-2.5 py-1 rounded-md">
-                                Desk {id}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
                   )}
 

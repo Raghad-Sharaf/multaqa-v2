@@ -94,8 +94,6 @@ export default function BookingStep1() {
       ? format(selectedDates.sort((a, b) => a.getTime() - b.getTime())[0], "yyyy-MM-dd")
       : format(date, "yyyy-MM-dd");
     const dur = getDuration(hoursPerDay);
-    const availableDesks = desks.filter(d => d.location === item.location && d.status === "Available" && d.id !== item.id);
-    const teamDeskIds = bookingMode === "team" ? [item.id, ...availableDesks.slice(0, teamSize - 1).map(d => d.id)] : undefined;
 
     setBookingDraft({
       itemId: item.id,
@@ -104,14 +102,14 @@ export default function BookingStep1() {
       date: baseDate,
       time: timeSlot,
       duration: dur,
-      totalPrice,
+      totalPrice: bookingMode === "team" ? item.priceHour * hoursPerDay : totalPrice,
       paymentMethod: "Cash",
       bookingMode,
       multiDays: bookingMode === "multi-day" ? selectedDates.map(d => format(d, "yyyy-MM-dd")) : undefined,
       recurringPattern: bookingMode === "recurring" ? recurringPattern : undefined,
       recurringEndDate: bookingMode === "recurring" ? recurringEndDate : undefined,
-      teamMembers: bookingMode === "team" ? teamEmails.filter(Boolean) : undefined,
-      teamDeskIds,
+      teamMembers: bookingMode === "team" ? Array(teamSize).fill("") : undefined,
+      teamDeskIds: bookingMode === "team" ? [item.id] : undefined,
     });
 
     setLocation("/book/step2");
@@ -248,16 +246,16 @@ export default function BookingStep1() {
             {bookingMode === "team" && (
               <div className="mt-4 space-y-3 pt-4 border-t" style={{ borderColor: "oklch(90% .005 285)" }}>
                 <div className="space-y-1">
-                  <Label className="text-[12px] font-semibold" style={{ color: "#001279" }}>Number of seats</Label>
+                  <Label className="text-[12px] font-semibold" style={{ color: "#001279" }}>Number of team members</Label>
                   <Select value={String(teamSize)} onValueChange={v => changeTeamSize(Number(v))}>
                     <SelectTrigger className="h-9 text-[13px]"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      {[2,3,4,5,6,7,8].map(n => <SelectItem key={n} value={String(n)}>{n} seats</SelectItem>)}
+                      {Array.from({ length: Math.max((item as any).capacity || 2, 2) }, (_, i) => i + 2).map(n => <SelectItem key={n} value={String(n)}>{n} members</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-[12px] font-semibold" style={{ color: "#001279" }}>Team emails</Label>
+                  <Label className="text-[12px] font-semibold" style={{ color: "#001279" }}>Team member emails</Label>
                   {Array.from({ length: teamSize }).map((_, i) => (
                     <Input key={i} type="email" placeholder={`member${i + 1}@example.com`}
                       value={teamEmails[i] || ""} onChange={e => updateTeamEmail(i, e.target.value)}

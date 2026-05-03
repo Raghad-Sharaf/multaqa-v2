@@ -110,23 +110,21 @@ export default function BookingConfirmation() {
                 </div>
               )}
 
-              {mode === "team" && booking.teamDeskIds && (
+              {mode === "team" && booking.teamMembers && (
                 <div className="mb-5 p-4 rounded-xl border" style={{ background: "rgba(26,122,74,0.04)", borderColor: "rgba(26,122,74,0.15)" }}>
                   <p className="text-[11px] uppercase font-bold tracking-wider mb-2.5" style={{ color: "#535060" }}>
-                    Team Rooms Reserved ({booking.teamDeskIds.length})
+                    Team Reserved ({booking.teamMembers.length} members)
                   </p>
-                  <div className="flex flex-wrap gap-1.5 mb-2">
-                    {booking.teamDeskIds.map(id => (
-                      <span key={id} className="text-white text-[11px] font-semibold px-2 py-0.5 rounded-md" style={{ background: "#1A7A4A" }}>
-                        Room {id}
+                  <p className="text-[12px] mb-2.5" style={{ color: "#535060" }}>
+                    This room is reserved for your entire team. Confirmations sent to:
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {booking.teamMembers.filter(Boolean).map((email, idx) => (
+                      <span key={idx} className="text-white text-[11px] font-semibold px-2 py-0.5 rounded-md" style={{ background: "#1A7A4A" }}>
+                        {email}
                       </span>
                     ))}
                   </div>
-                  {booking.teamMembers && booking.teamMembers.filter(Boolean).length > 0 && (
-                    <p className="text-[12px]" style={{ color: "#535060" }}>
-                      Confirmations sent to: {booking.teamMembers.filter(Boolean).join(", ")}
-                    </p>
-                  )}
                 </div>
               )}
 
