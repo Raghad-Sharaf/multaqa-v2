@@ -32,7 +32,7 @@ export type Desk = {
   image: string;
 };
 
-export type RoomType = "Private Office" | "Meeting Room" | "Phone Booth";
+export type RoomType = "Private Office" | "Private Office - Solo" | "Private Office - 2" | "Private Office - Team 4" | "Meeting Room" | "Phone Booth";
 
 export type Room = {
   id: string;
@@ -149,6 +149,12 @@ const initialRooms: Room[] = [
   { id: "R-3", name: "The Pod", type: "Phone Booth", capacity: 2, status: "Reserved", priceHour: 40, priceHalfDay: 140, equipment: ["HDMI/USB-C", "Soundproofed"], location: "Nablus", image: "/room-2.png" },
   { id: "R-4", name: "Creative Suite", type: "Meeting Room", capacity: 6, status: "Available", priceHour: 40, priceHalfDay: 140, equipment: [], location: "Ramallah", image: "/room-1.png" },
   { id: "R-5", name: "Focus Booth", type: "Phone Booth", capacity: 1, status: "Available", priceHour: 40, equipment: [], location: "Ramallah", image: "/room-2.png" },
+  { id: "R-6", name: "Solo Office A", type: "Private Office - Solo", capacity: 1, status: "Available", priceHour: 25, priceHalfDay: 80, equipment: ["Power outlet", "HDMI/USB-C", "Soundproofed", "Air conditioning"], location: "Nablus", image: "/room-3.png" },
+  { id: "R-7", name: "Duo Office A", type: "Private Office - 2", capacity: 2, status: "Available", priceHour: 35, priceHalfDay: 110, equipment: ["Whiteboard", "HDMI/USB-C", "Soundproofed", "Air conditioning"], location: "Nablus", image: "/room-1.png" },
+  { id: "R-8", name: "Team Office A", type: "Private Office - Team 4", capacity: 4, status: "Available", priceHour: 55, priceHalfDay: 180, equipment: ["Whiteboard", '65" Display', "HDMI/USB-C", "Soundproofed", "Air conditioning"], location: "Nablus", image: "/room-2.png" },
+  { id: "R-9", name: "Solo Office B", type: "Private Office - Solo", capacity: 1, status: "Reserved", priceHour: 25, priceHalfDay: 80, equipment: ["Power outlet", "HDMI/USB-C", "Soundproofed"], location: "Ramallah", image: "/room-3.png" },
+  { id: "R-10", name: "Duo Office B", type: "Private Office - 2", capacity: 2, status: "Available", priceHour: 35, priceHalfDay: 110, equipment: ["Whiteboard", "HDMI/USB-C", "Soundproofed"], location: "Ramallah", image: "/room-1.png" },
+  { id: "R-11", name: "Team Office B", type: "Private Office - Team 4", capacity: 4, status: "Available", priceHour: 55, priceHalfDay: 180, equipment: ["Whiteboard", '65" Display', "HDMI/USB-C", "Soundproofed"], location: "Ramallah", image: "/room-2.png" },
 ];
 
 const initialBookings: Booking[] = [

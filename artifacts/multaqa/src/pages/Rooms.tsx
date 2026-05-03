@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
-import { useAppContext, RoomType } from "@/context/AppContext";
+import { useAppContext } from "@/context/AppContext";
 import { Button } from "@/components/ui/button";
 import { MapPin, Users, SlidersHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
 
 type AmenityFilter = "All" | "Whiteboard" | "TV Screen" | "Video Conf";
+type TypeFilter = "All" | "Private Office" | "Meeting Room" | "Phone Booth";
 
 function Pill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
@@ -26,17 +27,26 @@ function Pill({ label, active, onClick }: { label: string; active: boolean; onCl
 
 export default function Rooms() {
   const { rooms, currentLocation, setCurrentLocation } = useAppContext();
-  const [filterType, setFilterType] = useState<RoomType | "All">("All");
+  const [filterType, setFilterType] = useState<TypeFilter>("All");
   const [filterAmenity, setFilterAmenity] = useState<AmenityFilter>("All");
 
   const filteredRooms = rooms.filter(r =>
     r.location === currentLocation &&
-    (filterType === "All" || r.type === filterType) &&
+    (filterType === "All" ||
+      (filterType === "Private Office" && r.type.startsWith("Private Office")) ||
+      r.type === filterType) &&
     (filterAmenity === "All" ||
       (filterAmenity === "Whiteboard" && r.equipment.some(e => e.toLowerCase().includes("whiteboard"))) ||
-      (filterAmenity === "TV Screen" && r.equipment.some(e => e.toLowerCase().includes("tv") || e.toLowerCase().includes("screen"))) ||
+      (filterAmenity === "TV Screen" && r.equipment.some(e => e.toLowerCase().includes("display") || e.toLowerCase().includes("screen") || e.toLowerCase().includes("tv"))) ||
       (filterAmenity === "Video Conf" && r.equipment.some(e => e.toLowerCase().includes("video"))))
   );
+
+  const typeLabel = (type: string) => {
+    if (type === "Private Office - Solo") return "Solo Office";
+    if (type === "Private Office - 2") return "Duo Office";
+    if (type === "Private Office - Team 4") return "Team Office";
+    return type;
+  };
 
   return (
     <UserLayout>
@@ -59,13 +69,13 @@ export default function Rooms() {
             </div>
           </div>
 
-          {/* Filter bar — full width */}
+          {/* Filter bar */}
           <div className="w-full bg-white rounded-xl border p-3 sm:p-4 space-y-2.5" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
             <div className="flex items-center flex-wrap gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 shrink-0" style={{ color: "#535060" }} />
               <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wide" style={{ color: "#001279" }}>Type:</span>
               {(["All", "Private Office", "Meeting Room", "Phone Booth"] as const).map(t => (
-                <Pill key={t} label={t} active={filterType === t} onClick={() => setFilterType(t as RoomType | "All")} />
+                <Pill key={t} label={t} active={filterType === t} onClick={() => setFilterType(t)} />
               ))}
             </div>
             <div className="flex items-center flex-wrap gap-2">
@@ -81,7 +91,7 @@ export default function Rooms() {
       {/* Cards grid */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8">
         {filteredRooms.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-xl border" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
+          <div className="text-center py-20 bg-white rounded-xl border" style={{ borderColor: "oklch(90% .005 285)" }}>
             <h3 className="text-lg font-bold mb-2" style={{ color: "#001279" }}>No rooms found</h3>
             <p className="text-sm mb-5" style={{ color: "#535060" }}>Try adjusting your filters.</p>
             <Button variant="outline" onClick={() => { setFilterType("All"); setFilterAmenity("All"); }}>
@@ -100,9 +110,9 @@ export default function Rooms() {
                 <Link href={`/rooms/${room.id}`} className="block h-full">
                   <div
                     className="group bg-white rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-md cursor-pointer"
-                    style={{ border: "1px solid rgba(0,18,121,0.09)" }}
+                    style={{ border: "1px solid oklch(90% .005 285)" }}
                     onMouseEnter={e => (e.currentTarget.style.borderColor = "#FF5100")}
-                    onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(0,18,121,0.09)")}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = "oklch(90% .005 285)")}
                   >
                     <div className="relative h-44 sm:h-48 overflow-hidden shrink-0">
                       <img src={room.image} alt={room.name}
@@ -111,7 +121,7 @@ export default function Rooms() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
                       <div className="absolute top-2 left-2">
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: "#FF5100" }}>
-                          {room.type}
+                          {typeLabel(room.type)}
                         </span>
                       </div>
                       <div className="absolute top-2 right-2">
@@ -145,7 +155,7 @@ export default function Rooms() {
                         )}
                       </div>
 
-                      <div className="mt-auto pt-2.5 border-t flex items-center justify-between" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+                      <div className="mt-auto pt-2.5 border-t flex items-center justify-between" style={{ borderColor: "oklch(90% .005 285)" }}>
                         <div>
                           <p className="text-[9px] font-medium uppercase tracking-wide" style={{ color: "#535060" }}>Rate</p>
                           <p className="font-bold text-sm" style={{ color: "#001279" }}>

@@ -390,11 +390,11 @@ export default function Home() {
           <p className="mb-10 max-w-xl mx-auto text-lg" style={{ color: "#535060" }}>
             Join hundreds of professionals working smarter across Nablus and Ramallah.
           </p>
-          <div className="flex flex-col xs:flex-row gap-3 justify-center w-full sm:w-auto px-4 sm:px-0">
-            <Link href="/desks" className="w-full xs:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <Link href="/desks">
               <Button
                 size="lg"
-                className="w-full xs:w-auto h-12 px-6 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2 border-0"
+                className="h-12 px-7 rounded-xl text-white font-semibold text-sm flex items-center gap-2 border-0"
                 style={{ background: "#FF5100", boxShadow: "0 6px 20px rgba(255,81,0,.28)" }}
                 onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "#e04800")}
                 onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "#FF5100")}
@@ -402,11 +402,11 @@ export default function Home() {
                 Browse Desks <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-            <Link href="/rooms" className="w-full xs:w-auto">
+            <Link href="/rooms">
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full xs:w-auto h-12 px-6 rounded-xl font-semibold text-sm transition-colors"
+                className="h-12 px-7 rounded-xl font-semibold text-sm transition-colors"
                 style={{ color: "#001279", borderColor: "rgba(0,18,121,0.35)", background: "transparent" }}
                 onMouseEnter={e => {
                   const b = e.currentTarget as HTMLButtonElement;

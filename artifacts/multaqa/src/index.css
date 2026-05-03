@@ -240,3 +240,14 @@
     inset: -1px;
   }
 }
+
+/* ── Global cursor ── */
+button:not(:disabled),
+a,
+[role="button"],
+select,
+input[type="radio"],
+input[type="checkbox"],
+label {
+  cursor: pointer;
+}

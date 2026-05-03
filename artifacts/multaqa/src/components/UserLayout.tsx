@@ -41,7 +41,7 @@ export function UserLayout({ children, footerVariant = "light" }: { children: Re
   const iconBg    = isDark ? "rgba(255,255,255,0.06)" : (isWhite ? "#F5F5F5" : "rgba(255,255,255,0.7)");
   const iconColor = isDark ? "rgba(255,255,255,0.5)"  : "#001279";
   const iconBorder= isDark ? "rgba(255,255,255,0.12)" : "rgba(0,18,121,0.18)";
-  const logoClass = isDark ? "h-10 w-auto mb-4 brightness-0 invert" : "h-10 w-auto mb-4";
+  const logoClass = isDark ? "h-10 sm:h-14 w-auto mb-4 brightness-0 invert" : "h-10 sm:h-14 w-auto mb-4";
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-muted-foreground">

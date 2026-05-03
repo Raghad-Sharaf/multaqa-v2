@@ -1,167 +1,146 @@
 import { useState } from "react";
 import { useAppContext } from "@/context/AppContext";
-import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CalendarDays, Users, RefreshCw, Heart, ArrowRight, Play } from "lucide-react";
+import { X, CalendarDays, Users, RefreshCw, Heart, ArrowRight } from "lucide-react";
 
 const steps = [
   {
-    icon: <CalendarDays className="w-10 h-10" />,
+    icon: <CalendarDays className="w-6 h-6" />,
     title: "Book your space in seconds",
-    desc: "Browse available desks and rooms, pick your date and time, and confirm in 3 easy steps — no account required.",
+    desc: "Browse desks and rooms, pick your date and time, confirm in 3 steps.",
   },
   {
-    icon: <Users className="w-10 h-10" />,
+    icon: <Users className="w-6 h-6" />,
     title: "Bring your whole team",
-    desc: "Use Team Booking to reserve multiple adjacent desks for your group in a single checkout. Confirmation goes to every member automatically.",
+    desc: "Reserve multiple adjacent desks for your group in a single checkout.",
   },
   {
-    icon: <RefreshCw className="w-10 h-10" />,
-    title: "Multi-day & Recurring bookings",
-    desc: "Need the same spot every week? Set up a recurring reservation. Or pick multiple days at once with our multi-day booking flow.",
+    icon: <RefreshCw className="w-6 h-6" />,
+    title: "Multi-day & recurring",
+    desc: "Need the same spot every week? Set up a recurring reservation easily.",
   },
   {
-    icon: <Heart className="w-10 h-10" />,
+    icon: <Heart className="w-6 h-6" />,
     title: "Save your favourites",
-    desc: "Heart any desk or room to save it as a favourite. On your next visit the system pre-selects your preferred seat if it's available.",
+    desc: "Heart any desk or room and it's instantly added to your saved list.",
   },
 ];
 
 export function OnboardingModal() {
   const { hasSeenOnboarding, setHasSeenOnboarding } = useAppContext();
   const [step, setStep] = useState(0);
-  const [showVideo, setShowVideo] = useState(false);
 
   if (hasSeenOnboarding) return null;
 
   const isLast = step === steps.length - 1;
-
   const handleDone = () => setHasSeenOnboarding(true);
 
   return (
     <AnimatePresence>
       <motion.div
-        key="onboarding-overlay"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
-        style={{ background: "rgba(0,18,121,0.65)", backdropFilter: "blur(6px)" }}
+        key="onboarding-bottom"
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 60 }}
+        transition={{ duration: 0.32, ease: "easeOut" }}
+        className="fixed bottom-4 left-4 right-4 z-50 pointer-events-none"
+        style={{ maxWidth: "420px", margin: "0 auto" }}
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94, y: 24 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
+        <div
+          className="bg-white rounded-2xl shadow-2xl overflow-hidden pointer-events-auto"
+          style={{ border: "1px solid rgba(0,18,121,0.1)" }}
         >
-          {/* Header */}
-          <div className="relative p-8 pb-0">
-            <button
-              onClick={handleDone}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:bg-muted/80 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
+          {/* Top accent */}
+          <div className="h-1 w-full" style={{ background: "#FF5100" }} />
+
+          <div className="p-5">
+            {/* Header row */}
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: "#FFF0E8", color: "#FF5100" }}>
+                  {steps[step].icon}
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5" style={{ color: "#FF5100" }}>
+                    Quick tour · {step + 1}/{steps.length}
+                  </p>
+                  <h3 className="font-bold text-[15px] leading-tight" style={{ color: "#001279" }}>
+                    {steps[step].title}
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={handleDone}
+                className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-colors"
+                style={{ background: "oklch(95% .03 268)", color: "#535060" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "oklch(90% .03 268)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "oklch(95% .03 268)")}
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <p className="text-[13px] leading-relaxed mb-4" style={{ color: "#535060" }}>
+              {steps[step].desc}
+            </p>
 
             {/* Progress dots */}
-            <div className="flex gap-2 mb-8">
+            <div className="flex items-center gap-1.5 mb-4">
               {steps.map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${i === step ? "w-8 bg-primary" : i < step ? "w-4 bg-primary/40" : "w-4 bg-muted"}`}
+                <div key={i} className="h-1 rounded-full transition-all duration-300"
+                  style={{
+                    width: i === step ? "24px" : "8px",
+                    background: i === step ? "#FF5100" : i < step ? "rgba(255,81,0,0.3)" : "oklch(90% .005 285)",
+                  }}
                 />
               ))}
             </div>
-          </div>
 
-          {/* Step Content */}
-          <AnimatePresence mode="wait">
-            {!showVideo ? (
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.22 }}
-                className="px-8 pb-8"
-              >
-                <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 text-primary"
-                  style={{ background: "#FFF0E8" }}>
-                  {steps[step].icon}
-                </div>
-                <h2 className="text-2xl font-bold text-secondary mb-3">{steps[step].title}</h2>
-                <p className="text-muted-foreground leading-relaxed mb-8">{steps[step].desc}</p>
-
-                {isLast && (
-                  <button
-                    onClick={() => setShowVideo(true)}
-                    className="flex items-center gap-3 w-full bg-secondary text-white rounded-xl p-4 mb-6 hover:bg-secondary/90 transition-colors group"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      <Play className="w-4 h-4 text-white fill-white" />
-                    </div>
-                    <div className="text-left">
-                      <p className="font-semibold text-sm">Watch the 90-second tour</p>
-                      <p className="text-white/60 text-xs">See Multaqa in action before you book</p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 ml-auto text-white/50" />
-                  </button>
-                )}
-
-                <div className="flex gap-3">
-                  {step > 0 && (
-                    <Button variant="outline" onClick={() => setStep(s => s - 1)} className="flex-1 h-12 border-border">
-                      Back
-                    </Button>
-                  )}
-                  {!isLast ? (
-                    <Button onClick={() => setStep(s => s + 1)} className="flex-1 h-12 bg-primary hover:bg-primary/90">
-                      Next <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  ) : (
-                    <Button onClick={handleDone} className="flex-1 h-12 bg-primary hover:bg-primary/90">
-                      Get Started
-                    </Button>
-                  )}
-                </div>
-                <button onClick={handleDone} className="w-full mt-4 text-sm text-muted-foreground hover:text-secondary transition-colors">
-                  Skip tour
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+              {step > 0 && (
+                <button
+                  onClick={() => setStep(s => s - 1)}
+                  className="h-9 px-3 rounded-xl text-[13px] font-medium border transition-colors"
+                  style={{ borderColor: "oklch(90% .005 285)", color: "#535060" }}
+                >
+                  Back
                 </button>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="video"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="px-8 pb-8"
+              )}
+              {!isLast ? (
+                <button
+                  onClick={() => setStep(s => s + 1)}
+                  className="flex-1 h-9 rounded-xl text-white text-[13px] font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                  style={{ background: "#FF5100" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#e04800")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "#FF5100")}
+                >
+                  Next <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <button
+                  onClick={handleDone}
+                  className="flex-1 h-9 rounded-xl text-white text-[13px] font-semibold transition-colors"
+                  style={{ background: "#FF5100" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#e04800")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "#FF5100")}
+                >
+                  Get Started
+                </button>
+              )}
+              <button
+                onClick={handleDone}
+                className="text-[12px] shrink-0 transition-colors"
+                style={{ color: "#535060" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#535060")}
               >
-                <h2 className="text-2xl font-bold text-secondary mb-2">Multaqa in 90 seconds</h2>
-                <p className="text-muted-foreground mb-6 text-sm">See how easy it is to find, book, and arrive at your space.</p>
-
-                {/* Video placeholder */}
-                <div className="rounded-xl overflow-hidden bg-secondary aspect-video flex flex-col items-center justify-center mb-6 relative"
-                  style={{ background: "linear-gradient(135deg,#000840,#001279)" }}>
-                  <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center mb-4 shadow-lg shadow-primary/30">
-                    <Play className="w-7 h-7 text-white fill-white ml-1" />
-                  </div>
-                  <p className="text-white font-semibold">Explainer Video</p>
-                  <p className="text-white/50 text-sm mt-1">Placeholder — replace with real embed</p>
-                </div>
-
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => setShowVideo(false)} className="flex-1 h-12 border-border">
-                    Back
-                  </Button>
-                  <Button onClick={handleDone} className="flex-1 h-12 bg-primary hover:bg-primary/90">
-                    Get Started
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+                Skip
+              </button>
+            </div>
+          </div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );

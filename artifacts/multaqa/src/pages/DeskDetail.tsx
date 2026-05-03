@@ -24,7 +24,7 @@ export default function DeskDetail() {
       )}
 
       {/* Back bar */}
-      <div className="border-b py-4" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+      <div className="border-b py-4" style={{ borderColor: "oklch(90% .005 285)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
           <Link href="/desks" className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors" style={{ color: "#535060" }}
             onMouseEnter={e => (e.currentTarget.style.color = "#FF5100")}
@@ -42,7 +42,7 @@ export default function DeskDetail() {
           <div className="lg:col-span-2 space-y-6">
 
             {/* Image */}
-            <div className="rounded-2xl overflow-hidden border h-[220px] sm:h-[300px] relative" style={{ borderColor: "rgba(0,18,121,0.09)" }}>
+            <div className="rounded-2xl overflow-hidden h-[220px] sm:h-[300px] relative" style={{ border: "1px solid oklch(90% .005 285)" }}>
               <img src={desk.image} alt={desk.name} className="w-full h-full object-cover" />
               <button
                 onClick={() => toggleFavorite(desk.id)}
@@ -65,7 +65,7 @@ export default function DeskDetail() {
                   style={{ background: desk.zone === "Deep Work" ? "#001279" : "#FF5100" }}>
                   {desk.zone === "Deep Work" ? "Deep Work Zone" : "Calls Allowed"}
                 </span>
-                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border" style={{ color: "#535060", borderColor: "rgba(0,18,121,0.18)" }}>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border" style={{ color: "#535060", borderColor: "oklch(90% .005 285)" }}>
                   {desk.type}
                 </span>
                 <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border"
@@ -82,42 +82,72 @@ export default function DeskDetail() {
               </p>
             </div>
 
-            {/* Amenities */}
-            <div className="border-t pt-6" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+            {/* Amenities — same design as rooms */}
+            <div className="border-t pt-6" style={{ borderColor: "oklch(90% .005 285)" }}>
               <h2 className="font-bold mb-4" style={{ fontSize: "18px", color: "#001279" }}>Amenities</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {desk.amenities.map(am => (
-                  <div key={am} className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: "#1A7A4A" }} />
-                    <span className="text-[14px] font-medium" style={{ color: "#001279" }}>{am}</span>
+              {desk.amenities.length > 0 || desk.wifi ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-xl border" style={{ background: "oklch(97% .02 268)", borderColor: "oklch(90% .005 285)" }}>
+                  {desk.amenities.map(am => (
+                    <div key={am} className="flex items-center gap-2.5">
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(26,122,74,0.12)" }}>
+                        <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#1A7A4A" }} />
+                      </div>
+                      <span className="text-[14px] font-medium" style={{ color: "#001279" }}>{am}</span>
+                    </div>
+                  ))}
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(26,122,74,0.12)" }}>
+                      <Wifi className="w-3.5 h-3.5" style={{ color: "#1A7A4A" }} />
+                    </div>
+                    <span className="text-[14px] font-medium" style={{ color: "#001279" }}>{desk.wifi} Speed WiFi</span>
                   </div>
-                ))}
-                <div className="flex items-center gap-2.5">
-                  <Wifi className="w-4 h-4 shrink-0" style={{ color: "#1A7A4A" }} />
-                  <span className="text-[14px] font-medium" style={{ color: "#001279" }}>{desk.wifi} Speed WiFi</span>
                 </div>
-              </div>
+              ) : (
+                <p className="text-[14px] italic" style={{ color: "#535060" }}>Standard desk setup.</p>
+              )}
+            </div>
+
+            {/* About */}
+            <div className="border-t pt-6" style={{ borderColor: "oklch(90% .005 285)" }}>
+              <h2 className="font-bold mb-3" style={{ fontSize: "18px", color: "#001279" }}>About this desk</h2>
+              <p className="text-[14px] leading-relaxed" style={{ color: "#535060" }}>
+                {desk.name} is a {desk.type.toLowerCase()} in the {desk.zone === "Deep Work" ? "Deep Work zone — quiet, focused, no calls" : "Calls Allowed zone — perfect for calls and collaboration"}.
+                Located at Multaqa {desk.location}, it offers {desk.wifi.toLowerCase()} speed WiFi and a professional working environment designed for productivity.
+              </p>
             </div>
 
             {/* Reviews */}
-            <div className="border-t pt-6" style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+            <div className="border-t pt-6" style={{ borderColor: "oklch(90% .005 285)" }}>
               <h2 className="font-bold mb-4" style={{ fontSize: "18px", color: "#001279" }}>Reviews</h2>
-              <div className="rounded-xl p-4 border" style={{ background: "oklch(97% .02 268)", borderColor: "rgba(0,18,121,0.07)" }}>
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-0.5 text-amber-400">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
+              <div className="space-y-3">
+                <div className="rounded-xl p-4 border" style={{ background: "oklch(97% .02 268)", borderColor: "oklch(90% .005 285)" }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-0.5 text-amber-400">
+                      {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
+                    </div>
+                    <span className="text-[12px]" style={{ color: "#535060" }}>Oct 2025</span>
                   </div>
-                  <span className="text-[12px]" style={{ color: "#535060" }}>Oct 2025</span>
+                  <p className="text-[14px] italic mb-2" style={{ color: "#001279" }}>"Great WiFi here, stayed all day and got so much done. Very quiet zone."</p>
+                  <p className="text-[12px] font-medium" style={{ color: "#535060" }}>— Khalid M.</p>
                 </div>
-                <p className="text-[14px] italic mb-2" style={{ color: "#001279" }}>"Great WiFi here, stayed all day and got so much done. Very quiet zone."</p>
-                <p className="text-[12px] font-medium" style={{ color: "#535060" }}>— Khalid M.</p>
+                <div className="rounded-xl p-4 border" style={{ background: "oklch(97% .02 268)", borderColor: "oklch(90% .005 285)" }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-0.5 text-amber-400">
+                      {[...Array(4)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
+                      <Star className="w-3.5 h-3.5 text-gray-300" />
+                    </div>
+                    <span className="text-[12px]" style={{ color: "#535060" }}>Nov 2025</span>
+                  </div>
+                  <p className="text-[14px] italic mb-2" style={{ color: "#001279" }}>"Clean, comfortable and well-equipped. Will definitely book again."</p>
+                  <p className="text-[12px] font-medium" style={{ color: "#535060" }}>— Sara H.</p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Booking Card */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white rounded-2xl border shadow-lg p-5" style={{ borderColor: "rgba(0,18,121,0.1)" }}>
+            <div className="sticky top-24 bg-white rounded-2xl shadow-lg p-5" style={{ border: "1px solid oklch(90% .005 285)" }}>
               <h3 className="font-bold mb-1" style={{ fontSize: "18px", color: "#001279" }}>Book {desk.name}</h3>
               <p className="text-[12px] mb-5" style={{ color: "#535060" }}>Choose your session length.</p>
 
@@ -127,7 +157,7 @@ export default function DeskDetail() {
                   ...(desk.priceHalfDay ? [{ label: "Half Day", price: desk.priceHalfDay, note: "4 hrs" }] : []),
                   ...(desk.priceFullDay ? [{ label: "Full Day", price: desk.priceFullDay, note: "8 hrs" }] : []),
                 ].map((row, i, arr) => (
-                  <div key={row.label} className={`flex justify-between items-center py-2.5 ${i < arr.length - 1 ? "border-b" : ""}`} style={{ borderColor: "rgba(0,18,121,0.07)" }}>
+                  <div key={row.label} className={`flex justify-between items-center py-2.5 ${i < arr.length - 1 ? "border-b" : ""}`} style={{ borderColor: "oklch(90% .005 285)" }}>
                     <span className="text-[14px]" style={{ color: "#535060" }}>
                       {row.label} {row.note && <span className="text-[11px] opacity-70">({row.note})</span>}
                     </span>
@@ -153,10 +183,10 @@ export default function DeskDetail() {
                     className="w-full h-10 rounded-xl border text-[13px] font-medium flex items-center justify-center gap-2 transition-all"
                     style={isFav
                       ? { borderColor: "#FF5100", color: "#FF5100", background: "rgba(255,81,0,0.04)" }
-                      : { borderColor: "rgba(0,18,121,0.18)", color: "#535060" }
+                      : { borderColor: "oklch(90% .005 285)", color: "#535060" }
                     }
                     onMouseEnter={e => { if (!isFav) { e.currentTarget.style.borderColor = "#FF5100"; e.currentTarget.style.color = "#FF5100"; } }}
-                    onMouseLeave={e => { if (!isFav) { e.currentTarget.style.borderColor = "rgba(0,18,121,0.18)"; e.currentTarget.style.color = "#535060"; } }}
+                    onMouseLeave={e => { if (!isFav) { e.currentTarget.style.borderColor = "oklch(90% .005 285)"; e.currentTarget.style.color = "#535060"; } }}
                   >
                     <Heart className="w-3.5 h-3.5" style={isFav ? { fill: "#FF5100", color: "#FF5100" } : {}} />
                     {isFav ? "Saved as Favourite" : "Save as Favourite"}
@@ -179,7 +209,7 @@ export default function DeskDetail() {
                   <button
                     onClick={() => toggleFavorite(desk.id)}
                     className="w-full h-10 rounded-xl border text-[13px] font-medium flex items-center justify-center gap-2"
-                    style={isFav ? { borderColor: "#FF5100", color: "#FF5100", background: "rgba(255,81,0,0.04)" } : { borderColor: "rgba(0,18,121,0.18)", color: "#535060" }}
+                    style={isFav ? { borderColor: "#FF5100", color: "#FF5100", background: "rgba(255,81,0,0.04)" } : { borderColor: "oklch(90% .005 285)", color: "#535060" }}
                   >
                     <Heart className="w-3.5 h-3.5" style={isFav ? { fill: "#FF5100", color: "#FF5100" } : {}} />
                     {isFav ? "Saved as Favourite" : "Save as Favourite"}

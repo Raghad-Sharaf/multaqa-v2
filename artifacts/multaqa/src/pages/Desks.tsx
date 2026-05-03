@@ -127,9 +127,9 @@ export default function Desks() {
                   <Link href={href} className="block h-full">
                     <div
                       className="group bg-white rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-md cursor-pointer"
-                      style={{ border: "1px solid rgba(0,18,121,0.09)" }}
+                      style={{ border: "1px solid oklch(90% .005 285)" }}
                       onMouseEnter={e => (e.currentTarget.style.borderColor = "#FF5100")}
-                      onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(0,18,121,0.09)")}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = "oklch(90% .005 285)")}
                     >
                       {/* Image */}
                       <div className="relative h-40 sm:h-44 overflow-hidden shrink-0">
