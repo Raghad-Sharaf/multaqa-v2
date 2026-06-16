@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useRoute } from "wouter";
+import { Link, useRoute, useLocation } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
 import { useAppContext } from "@/context/AppContext";
 import { ArrowLeft, Wifi, CheckCircle2, Star, MapPin, Heart, BellRing, X } from "lucide-react";
@@ -14,7 +14,8 @@ const DESK_TYPE_DESC: Record<string, string> = {
 
 export default function DeskDetail() {
   const [match, params] = useRoute("/desks/:id");
-  const { desks, favorites, toggleFavorite } = useAppContext();
+  const [, setLocation] = useLocation();
+  const { desks, favorites, toggleFavorite, currentUser } = useAppContext();
   const [showWaitlist, setShowWaitlist] = useState(false);
   const [showTypeTooltip, setShowTypeTooltip] = useState(false);
 
@@ -23,6 +24,14 @@ export default function DeskDetail() {
   if (!desk) return <NotFound />;
 
   const isFav = favorites.includes(desk.id);
+
+  const handleBookClick = (e?: React.MouseEvent) => {
+    if (!currentUser) {
+      e?.preventDefault();
+      localStorage.setItem("redirectAfterLogin", `/desks/${desk.id}`);
+      setLocation("/login?message=Please log in to complete your booking.");
+    }
+  };
 
   return (
     <UserLayout>
@@ -203,7 +212,7 @@ export default function DeskDetail() {
 
               {desk.status === "Available" ? (
                 <div className="flex flex-col gap-3">
-                  <Link href={`/book/step1?item=${desk.id}&type=desk`}>
+                  <Link href={currentUser ? `/book/step1?item=${desk.id}&type=desk` : "/login"} onClick={handleBookClick}>
                     <button
                       className="w-full h-11 rounded-xl text-white text-[14px] font-semibold transition-colors"
                       style={{ background: "#FF5100" }}

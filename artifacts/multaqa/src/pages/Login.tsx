@@ -14,9 +14,21 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+function getRedirectPath() {
+  const redirect = localStorage.getItem("redirectAfterLogin");
+  if (redirect) {
+    localStorage.removeItem("redirectAfterLogin");
+    return redirect;
+  }
+  return null;
+}
+
 export default function Login() {
   const { setCurrentUser } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const message = urlParams.get("message");
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -30,12 +42,13 @@ export default function Login() {
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
+      const redirect = getRedirectPath();
       if (values.email.includes("admin")) {
         setCurrentUser({ id: 99, name: "Admin User", email: values.email, role: "admin" });
-        window.location.href = "/admin"; // Force reload to apply admin layout properly
+        window.location.href = "/admin";
       } else {
         setCurrentUser({ id: 1, name: "Khalid Mansour", email: values.email, role: "user" });
-        window.location.href = "/my-reservations"; // Force reload
+        window.location.href = redirect || "/my-reservations";
       }
       setIsLoading(false);
     }, 800);
@@ -48,6 +61,11 @@ export default function Login() {
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-secondary mb-2 tracking-tight">Welcome back</h1>
             <p className="text-muted-foreground">Sign in to manage your bookings.</p>
+            {message && (
+              <div className="mt-4 p-3 rounded-lg border text-sm font-medium" style={{ background: "rgba(255,81,0,0.06)", borderColor: "rgba(255,81,0,0.2)", color: "#FF5100" }}>
+                {message}
+              </div>
+            )}
           </div>
 
           <Form {...form}>

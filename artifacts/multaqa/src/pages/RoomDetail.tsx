@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useRoute } from "wouter";
+import { Link, useRoute, useLocation } from "wouter";
 import { UserLayout } from "@/components/UserLayout";
 import { useAppContext } from "@/context/AppContext";
 import { ArrowLeft, Users, CheckCircle2, MapPin, Heart, BellRing, Star } from "lucide-react";
@@ -8,12 +8,21 @@ import { WaitlistModal } from "@/components/WaitlistModal";
 
 export default function RoomDetail() {
   const [match, params] = useRoute("/rooms/:id");
-  const { rooms, favorites, toggleFavorite } = useAppContext();
+  const [, setLocation] = useLocation();
+  const { rooms, favorites, toggleFavorite, currentUser } = useAppContext();
   const [showWaitlist, setShowWaitlist] = useState(false);
 
   if (!match || !params.id) return <NotFound />;
   const room = rooms.find(r => r.id === params.id);
   if (!room) return <NotFound />;
+
+  const handleBookClick = (e?: React.MouseEvent) => {
+    if (!currentUser) {
+      e?.preventDefault();
+      localStorage.setItem("redirectAfterLogin", `/rooms/${room.id}`);
+      setLocation("/login?message=Please log in to complete your booking.");
+    }
+  };
 
   const isFav = favorites.includes(room.id);
 
@@ -165,7 +174,7 @@ export default function RoomDetail() {
 
               {room.status === "Available" ? (
                 <div className="flex flex-col gap-3">
-                  <Link href={`/book/step1?item=${room.id}&type=room`}>
+                  <Link href={currentUser ? `/book/step1?item=${room.id}&type=room` : "/login"} onClick={handleBookClick}>
                     <button
                       className="w-full h-11 rounded-xl text-white text-[14px] font-semibold transition-colors"
                       style={{ background: "#FF5100" }}

@@ -4,6 +4,7 @@ import { UserLayout } from "@/components/UserLayout";
 import { useAppContext } from "@/context/AppContext";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { Users, User, Shield } from "lucide-react";
 import { motion } from "framer-motion";
@@ -28,8 +29,8 @@ export default function Community() {
     setIsAnonymous(checked);
     // In a real app we'd update the backend. Here we update the local state if they are in the list.
     if (currentMember) {
-      setMembers(prev => 
-        prev.map(m => m.id === currentUser.id ? { ...m, isAnonymous: checked } : m)
+      setMembers(
+        members.map(m => m.id === currentUser.id ? { ...m, isAnonymous: checked } : m)
       );
     }
   };

@@ -35,12 +35,22 @@ export default function Register() {
     },
   });
 
+  function getRedirectPath() {
+    const redirect = localStorage.getItem("redirectAfterLogin");
+    if (redirect) {
+      localStorage.removeItem("redirectAfterLogin");
+      return redirect;
+    }
+    return null;
+  }
+
   function onSubmit(values: z.infer<typeof registerSchema>) {
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
+      const redirect = getRedirectPath();
       setCurrentUser({ id: Math.floor(Math.random() * 1000), name: values.name, email: values.email, role: "user" });
-      setLocation("/");
+      setLocation(redirect || "/");
       setIsLoading(false);
     }, 800);
   }

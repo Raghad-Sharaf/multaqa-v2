@@ -250,7 +250,7 @@ export default function BookingStep1() {
                   <Select value={String(teamSize)} onValueChange={v => changeTeamSize(Number(v))}>
                     <SelectTrigger className="h-9 text-[13px]"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      {Array.from({ length: Math.max((item as any).capacity || 2, 2) }, (_, i) => i + 2).map(n => <SelectItem key={n} value={String(n)}>{n} members</SelectItem>)}
+                      {Array.from({ length: Math.max((item as any).capacity || 2, 2) - 1 }, (_, i) => i + 2).map(n => <SelectItem key={n} value={String(n)}>{n} members</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
